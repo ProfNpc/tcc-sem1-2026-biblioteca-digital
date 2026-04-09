@@ -1,0 +1,10 @@
+/* Meus empréstimos — aluno: reforço visual da área da tabela */
+.pagina-emprestimos-aluno .emprestimos-tabela-area {
+  box-shadow: var(--shadow-md);
+}
+
+.pagina-emprestimos-aluno .tabela-dados td:nth-child(3) {
+  font-variant-numeric: tabular-nums;
+  color: var(--muted);
+  font-weight: 500;
+}

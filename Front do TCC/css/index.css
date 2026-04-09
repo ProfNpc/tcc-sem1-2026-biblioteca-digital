@@ -1,0 +1,185 @@
+/* Página inicial pública — hero premium + coluna visual */
+/* Fundo institucional: cinza-ardósia quente (não branco) */
+.pagina-inicio-publico {
+  background-color: #cfd6de;
+  background-image: radial-gradient(ellipse 110% 85% at 8% 12%, rgb(13 148 136 / 0.09) 0%, transparent 48%),
+    radial-gradient(ellipse 80% 60% at 92% 88%, rgb(15 23 42 / 0.06) 0%, transparent 42%),
+    linear-gradient(168deg, #d8dee6 0%, #cdd5df 38%, #c5ccd6 72%, #bec6d1 100%);
+}
+
+.pagina-inicio-publico .layout-pagina > main {
+  flex: 1;
+  max-width: none;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.inicio-grade {
+  display: grid;
+  grid-template-columns: 1fr;
+  flex: 1;
+  width: 100%;
+  min-height: min(72vh, 760px);
+  align-items: stretch;
+}
+
+@media (min-width: 900px) {
+  .inicio-grade {
+    grid-template-columns: 1.05fr 0.95fr;
+    max-width: 1440px;
+    margin-inline: auto;
+    min-height: min(calc(100vh - 140px), 900px);
+  }
+}
+
+.inicio-coluna-texto {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: clamp(2rem, 5vw, 3.5rem) clamp(1.5rem, 4vw, 2.5rem);
+  max-width: 36rem;
+  margin: 0 auto;
+}
+
+@media (min-width: 900px) {
+  .inicio-coluna-texto {
+    padding: 3rem clamp(2rem, 6vw, 4rem) 3rem min(8vw, 5rem);
+    margin: 0;
+    max-width: none;
+  }
+}
+
+.inicio-sobretitulo {
+  margin: 0 0 0.85rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent-dark);
+  font-family: var(--font-sans);
+}
+
+.inicio-hero {
+  max-width: 38rem;
+}
+
+.inicio-hero h1 {
+  margin: 0 0 1.35rem;
+  font-size: clamp(2.25rem, 4.5vw, 3rem);
+  font-weight: 600;
+  color: var(--navy);
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+}
+
+.inicio-texto {
+  font-size: 1.125rem;
+  color: var(--muted);
+  margin-bottom: 2.25rem;
+  line-height: 1.68;
+}
+
+.inicio-texto strong {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.inicio-chamada-botao {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.9rem 1.65rem;
+  border-radius: var(--radius-sm);
+  background: linear-gradient(180deg, #14b8a6 0%, var(--accent) 40%, var(--accent-dark) 100%);
+  color: #fff !important;
+  font-weight: 600;
+  text-decoration: none !important;
+  font-size: 1.02rem;
+  box-shadow: 0 4px 20px rgb(13 148 136 / 0.35), inset 0 1px 0 rgb(255 255 255 / 0.2);
+  transition: transform 0.2s var(--ease-out), box-shadow 0.2s var(--ease-out), filter 0.2s var(--ease-out);
+}
+
+.inicio-chamada-botao:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 28px rgb(13 148 136 / 0.42);
+  filter: brightness(1.03);
+  text-decoration: none !important;
+}
+
+.inicio-chamada-botao:focus-visible {
+  outline: 2px solid var(--accent-dark);
+  outline-offset: 3px;
+}
+
+.inicio-chamada-botao:active {
+  transform: translateY(0);
+}
+
+.inicio-coluna-visual {
+  position: relative;
+  min-height: 300px;
+  overflow: hidden;
+  background: linear-gradient(155deg, #022c22 0%, #0f766e 38%, #115e59 70%, #134e4a 100%);
+}
+
+@media (min-width: 900px) {
+  .inicio-coluna-visual {
+    min-height: auto;
+    border-radius: var(--radius-lg) 0 0 var(--radius-lg);
+    margin: 1.25rem 0 1.25rem 0;
+    box-shadow: -12px 0 40px -8px rgb(15 23 42 / 0.12), inset 1px 0 0 rgb(255 255 255 / 0.06);
+  }
+}
+
+@media (max-width: 899px) {
+  .inicio-coluna-visual {
+    border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+    margin: 0 1rem 1rem;
+    min-height: 260px;
+    box-shadow: var(--shadow-md);
+  }
+}
+
+.inicio-imagem-decorativa {
+  width: 100%;
+  height: 100%;
+  min-height: 260px;
+  object-fit: cover;
+  object-position: center 42%;
+  display: block;
+  opacity: 0.97;
+}
+
+@media (min-width: 900px) {
+  .inicio-imagem-decorativa {
+    min-height: 100%;
+  }
+}
+
+.inicio-coluna-visual::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(180deg, rgb(0 0 0 / 0.12) 0%, transparent 35%, transparent 65%, rgb(0 0 0 / 0.08) 100%);
+  z-index: 1;
+}
+
+.inicio-coluna-visual::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+  background: linear-gradient(90deg, rgb(216 222 230 / 0.4) 0%, transparent 24%, transparent 100%);
+}
+
+@media (max-width: 899px) {
+  .inicio-coluna-visual::after {
+    background: linear-gradient(180deg, rgb(216 222 230 / 0.22) 0%, transparent 32%, transparent 100%);
+  }
+}

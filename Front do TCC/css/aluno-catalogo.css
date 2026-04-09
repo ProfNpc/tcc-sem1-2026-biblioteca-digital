@@ -1,0 +1,177 @@
+/* Catálogo — cartões de obra refinados */
+.catalogo-barra {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.75rem;
+}
+
+.catalogo-contagem {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8125rem;
+  color: var(--muted);
+  font-weight: 600;
+  padding: 0.45rem 0.9rem;
+  background: var(--surface);
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-xs);
+}
+
+.catalogo-grade {
+  display: grid;
+  gap: clamp(1.25rem, 3vw, 1.75rem);
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 560px) {
+  .catalogo-grade {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 900px) {
+  .catalogo-grade {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.catalogo-livro {
+  display: flex;
+  flex-direction: column;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  transition: transform 0.25s var(--ease-out), box-shadow 0.25s var(--ease-out), border-color 0.25s var(--ease-out);
+}
+
+.catalogo-livro:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-lg);
+  border-color: rgb(13 148 136 / 0.18);
+}
+
+.catalogo-livro-capa {
+  aspect-ratio: 3 / 4;
+  background: linear-gradient(155deg, #1e293b 0%, #0f766e 55%, #134e4a 100%);
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-start;
+  padding: 1.35rem;
+  position: relative;
+}
+
+.catalogo-livro-capa::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgb(255 255 255 / 0.06) 0%, transparent 45%);
+  pointer-events: none;
+}
+
+.catalogo-livro-capa::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(transparent 35%, rgb(0 0 0 / 0.5) 100%);
+  pointer-events: none;
+}
+
+.catalogo-livro-capa-titulo {
+  
+  position: relative;
+  z-index: 1;
+  font-family: var(--font-display);
+  font-size: 1.1875rem;
+  font-weight: 600;
+  color: #fff;
+  line-height: 1.28;
+  margin: 0;
+  text-shadow: 0 2px 16px rgb(0 0 0 / 0.4);
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* .img-verde{
+  display: flex;
+  position: relative; */
+  /* margin-left: auto;
+  margin-right: auto; */
+  /* width: 30rem
+  height: 30rem;
+
+} */
+
+.catalogo-livro-titulo {
+  margin: 0 0 0.5rem;
+  font-size: 1.125rem;
+  font-family: var(--font-display);
+  font-weight: 600;
+  color: var(--navy);
+  line-height: 1.3;
+  letter-spacing: -0.02em;
+}
+
+.catalogo-livro-corpo {
+  padding: 1.35rem 1.4rem 1.45rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(180deg, #ffffff 0%, #fafbfc 100%);
+}
+
+.catalogo-livro-autores {
+  margin: 0 0 1.1rem;
+  font-size: 0.9375rem;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.catalogo-livro-rodape {
+  margin-top: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  padding-top: 0.25rem;
+}
+
+.catalogo-livro-disponibilidade {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--muted-light);
+}
+
+.catalogo-livro:nth-child(3n + 1) .catalogo-livro-capa {
+  background: linear-gradient(155deg, #1e293b 0%, #0f766e 100%);
+}
+
+.catalogo-livro:nth-child(3n + 2) .catalogo-livro-capa {
+  background: linear-gradient(155deg, #312e81 0%, #4338ca 100%);
+}
+
+.catalogo-livro:nth-child(3n) .catalogo-livro-capa {
+  background: linear-gradient(155deg, #9a3412 0%, #c2410c 100%);
+}
+
+.texto-nota-rodape {
+  margin-top: 1.5rem;
+  font-size: 0.8125rem;
+  color: var(--muted-light);
+  padding: 0.85rem 1rem;
+  background: var(--surface-muted);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-light);
+  max-width: 42rem;
+}
