@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Acesso Restrito — BiblioTech</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;1,500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/comum.css" />
+    <link rel="stylesheet" href="css/acesso-negado.css" />
+  </head>
+  <body>
+    
+    <div class="layout-pagina">
+      <header class="topo-site topo-site--escuro">
+        <a href="index.html" class="topo-marca topo-marca--clara"
+          ><span class="topo-marca-simbolo" aria-hidden="true"></span> BiblioTech</a
+        >
+        <nav class="topo-menu" aria-label="Principal">
+          <a href="index.html">Início</a>
+        </nav>
+      </header>
+
+      <main class="conteudo-principal--estreito conteudo-acesso-negado" id="conteudo-principal">
+        <div class="mensagem-painel mensagem-painel--destaque">
+          <h1>Acesso restrito</h1>
+          <p class="texto-apoio">
+            Seu perfil atual não possui permissão para visualizar esta área da plataforma. Faça login com outra conta ou retorne ao início.
+          </p>
+          <p>
+            <a class="botao botao--primario" href="login.html">Fazer login</a>
+            <a class="botao botao--secundario" href="index.html">Voltar ao início</a>
+          </p>
+        </div>
+      </main>
+
+      <footer class="rodape-site">
+        <p>BiblioTech protege cada área conforme o perfil de acesso para manter a navegação segura e organizada.</p>
+      </footer>
+    </div>
+  </body>
+</html>

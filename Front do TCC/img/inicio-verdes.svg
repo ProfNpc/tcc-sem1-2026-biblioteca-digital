@@ -1,0 +1,130 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 900" role="img" aria-label="Ilustração de biblioteca em tons de verde">
+  <defs>
+    <linearGradient id="fundo-principal" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#042f2e"/>
+      <stop offset="45%" stop-color="#0d9488"/>
+      <stop offset="100%" stop-color="#5eead4"/>
+    </linearGradient>
+    <linearGradient id="onda-superior" x1="100%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#134e4a"/>
+      <stop offset="50%" stop-color="#14b8a6"/>
+      <stop offset="100%" stop-color="#ccfbf1"/>
+    </linearGradient>
+    <linearGradient id="lombada-a" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#ecfdf5"/>
+      <stop offset="100%" stop-color="#a7f3d0"/>
+    </linearGradient>
+    <linearGradient id="lombada-b" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#d1fae5"/>
+      <stop offset="100%" stop-color="#34d399"/>
+    </linearGradient>
+    <linearGradient id="paginas-abertas" x1="0%" y1="50%" x2="100%" y2="50%">
+      <stop offset="0%" stop-color="#f0fdfa"/>
+      <stop offset="50%" stop-color="#ccfbf1"/>
+      <stop offset="100%" stop-color="#f0fdfa"/>
+    </linearGradient>
+    <radialGradient id="luz-leitura" cx="40%" cy="35%" r="55%">
+      <stop offset="0%" stop-color="#6ee7b7" stop-opacity="0.35"/>
+      <stop offset="70%" stop-color="#0d9488" stop-opacity="0.08"/>
+      <stop offset="100%" stop-color="#042f2e" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="suave" x="-15%" y="-15%" width="130%" height="130%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="22"/>
+    </filter>
+    <radialGradient id="vinheta" cx="50%" cy="42%" r="72%">
+      <stop offset="45%" stop-color="#022c22" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#022c22" stop-opacity="0.22"/>
+    </radialGradient>
+  </defs>
+
+  <!-- Fundo atmosférico (mistura de verdes) -->
+  <rect width="800" height="900" fill="url(#fundo-principal)"/>
+  <ellipse cx="380" cy="420" rx="480" ry="360" fill="url(#luz-leitura)" filter="url(#suave)"/>
+  <path fill="url(#onda-superior)" opacity="0.75" d="M0 280 Q200 140 420 240 T800 160 L800 0 L0 0 Z"/>
+  <path fill="#065f46" opacity="0.4" d="M0 560 Q320 480 520 620 T800 520 L800 900 L0 900 Z"/>
+
+  <!-- Prateleira superior + livros -->
+  <g opacity="0.92">
+    <rect x="72" y="308" width="656" height="10" rx="2" fill="#022c22" opacity="0.55"/>
+    <rect x="88" y="198" width="28" height="110" rx="3" fill="url(#lombada-a)"/>
+    <rect x="120" y="212" width="22" height="96" rx="2" fill="#0f766e"/>
+    <rect x="146" y="188" width="32" height="120" rx="3" fill="#34d399" opacity="0.85"/>
+    <rect x="182" y="205" width="24" height="103" rx="2" fill="#ecfdf5" opacity="0.9"/>
+    <rect x="210" y="192" width="26" height="116" rx="2" fill="#14b8a6"/>
+    <rect x="240" y="218" width="20" height="90" rx="2" fill="#065f46"/>
+    <rect x="264" y="200" width="30" height="108" rx="3" fill="url(#lombada-b)"/>
+    <rect x="298" y="210" width="24" height="98" rx="2" fill="#5eead4" opacity="0.75"/>
+    <rect x="326" y="185" width="34" height="123" rx="3" fill="#047857"/>
+    <rect x="364" y="202" width="26" height="106" rx="2" fill="#d1fae5"/>
+    <rect x="394" y="195" width="28" height="113" rx="2" fill="#0d9488"/>
+    <rect x="426" y="208" width="22" height="100" rx="2" fill="#6ee7b7" opacity="0.8"/>
+    <rect x="452" y="190" width="30" height="118" rx="3" fill="#134e4a"/>
+    <rect x="486" y="215" width="24" height="93" rx="2" fill="#a7f3d0"/>
+    <rect x="514" y="198" width="28" height="110" rx="2" fill="#10b981"/>
+    <rect x="546" y="205" width="26" height="103" rx="2" fill="#ecfdf5" opacity="0.85"/>
+    <rect x="576" y="188" width="32" height="120" rx="3" fill="#0f766e"/>
+    <rect x="612" y="200" width="24" height="108" rx="2" fill="#5eead4" opacity="0.7"/>
+    <rect x="640" y="210" width="22" height="98" rx="2" fill="#022c22" opacity="0.6"/>
+    <rect x="666" y="195" width="30" height="113" rx="3" fill="#34d399"/>
+  </g>
+
+  <!-- Prateleira do meio + livros -->
+  <g opacity="0.88">
+    <rect x="96" y="498" width="608" height="10" rx="2" fill="#022c22" opacity="0.5"/>
+    <rect x="110" y="402" width="26" height="96" rx="3" fill="#14b8a6"/>
+    <rect x="140" y="388" width="30" height="110" rx="3" fill="#ecfdf5" opacity="0.88"/>
+    <rect x="174" y="410" width="22" height="88" rx="2" fill="#047857"/>
+    <rect x="200" y="395" width="28" height="103" rx="2" fill="url(#lombada-a)"/>
+    <rect x="232" y="418" width="20" height="80" rx="2" fill="#5eead4" opacity="0.65"/>
+    <rect x="256" y="392" width="32" height="106" rx="3" fill="#0d9488"/>
+    <rect x="292" y="405" width="24" height="93" rx="2" fill="#d1fae5"/>
+    <rect x="320" y="398" width="28" height="100" rx="2" fill="#065f46"/>
+    <rect x="352" y="412" width="26" height="86" rx="2" fill="#6ee7b7" opacity="0.75"/>
+    <rect x="382" y="385" width="34" height="113" rx="3" fill="#134e4a"/>
+    <rect x="420" y="400" width="24" height="98" rx="2" fill="#a7f3d0"/>
+    <rect x="448" y="408" width="22" height="90" rx="2" fill="#10b981"/>
+    <rect x="474" y="390" width="30" height="108" rx="3" fill="#ecfdf5" opacity="0.82"/>
+    <rect x="508" y="402" width="26" height="96" rx="2" fill="#0f766e"/>
+    <rect x="538" y="395" width="28" height="103" rx="2" fill="#34d399" opacity="0.85"/>
+    <rect x="570" y="415" width="20" height="83" rx="2" fill="#022c22" opacity="0.55"/>
+    <rect x="594" y="388" width="32" height="110" rx="3" fill="#14b8a6"/>
+    <rect x="630" y="405" width="24" height="93" rx="2" fill="#d1fae5"/>
+    <rect x="658" y="398" width="26" height="100" rx="2" fill="#5eead4" opacity="0.7"/>
+  </g>
+
+  <!-- Pilha de livros (canto) -->
+  <g opacity="0.9" transform="translate(620, 620)">
+    <rect x="0" y="48" width="100" height="18" rx="2" fill="#065f46" transform="rotate(-4 50 57)"/>
+    <rect x="6" y="28" width="92" height="22" rx="2" fill="#ecfdf5" opacity="0.9" transform="rotate(3 52 39)"/>
+    <rect x="2" y="8" width="96" height="24" rx="2" fill="#0d9488" transform="rotate(-2 50 20)"/>
+    <rect x="10" y="-8" width="82" height="20" rx="2" fill="#34d399" transform="rotate(5 51 2)"/>
+  </g>
+
+  <!-- Livro aberto (foco central inferior) -->
+  <g transform="translate(400, 720)">
+    <path
+      fill="url(#paginas-abertas)"
+      opacity="0.95"
+      d="M0 -120 C-120 -130 -200 -40 -195 25 C-190 90 -100 130 0 118 Z"
+    />
+    <path
+      fill="url(#paginas-abertas)"
+      opacity="0.95"
+      d="M0 -120 C120 -130 200 -40 195 25 C190 90 100 130 0 118 Z"
+    />
+    <path fill="#0f766e" opacity="0.35" d="M-8 -125 L8 -125 L6 118 L-6 118 Z"/>
+    <g opacity="0.2" fill="#134e4a">
+      <rect x="-170" y="-70" width="72" height="3" rx="1"/>
+      <rect x="-170" y="-58" width="88" height="3" rx="1"/>
+      <rect x="-170" y="-46" width="64" height="3" rx="1"/>
+      <rect x="98" y="-70" width="72" height="3" rx="1"/>
+      <rect x="82" y="-58" width="88" height="3" rx="1"/>
+      <rect x="106" y="-46" width="64" height="3" rx="1"/>
+    </g>
+    <!-- Marcador -->
+    <path fill="#f43f5e" opacity="0.85" d="M-2 -128 L-2 -95 L-14 -105 L-26 -95 L-26 -128 Z"/>
+  </g>
+
+  <!-- Vinheta suave nas bordas -->
+  <rect width="800" height="900" fill="url(#vinheta)" pointer-events="none"/>
+</svg>
