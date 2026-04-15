@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Painel Docente — BiblioTech</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;1,500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/comum.css" />
+    <link rel="stylesheet" href="css/docente-emprestimos.css" />
+  </head>
+  <body class="pagina-emprestimos-docente" data-guard="docente,admin">
+   
+    <div class="layout-pagina">
+      <header class="topo-site topo-site--escuro">
+        <a href="index.html" class="topo-marca topo-marca--clara"
+          ><span class="topo-marca-simbolo" aria-hidden="true"></span> BiblioTech</a
+        >
+        <nav class="topo-menu" aria-label="Área docente">
+          <a href="index.html">Início</a>
+          <a href="docente-emprestimos.html" aria-current="page">Empréstimos por aluno</a>
+          <a href="admin.html" data-restrito-admin>Administração</a>
+        </nav>
+        <div class="topo-acoes">
+          <span class="topo-usuario-pilula" title="Usuário logado"><span class="topo-usuario-nome">—</span></span>
+          <button type="button" class="botao botao--secundario" data-acao-sair>Sair</button>
+        </div>
+      </header>
+
+      <main class="conteudo-principal--largo" id="conteudo-principal">
+        <header class="secao-cabecalho">
+          <h2 class="secao-titulo">Painel de Acompanhamento</h2>
+          <p class="secao-descricao texto-apoio">
+            Carregando visão consolidada dos empréstimos...
+          </p>
+        </header>
+
+        <p id="emprestimos-erro" class="login-erro" hidden></p>
+
+        <div class="emprestimos-tabela-area">
+          <table class="tabela-dados">
+            <thead>
+              <tr>
+                <th scope="col">Aluno</th>
+                <th scope="col">Livro</th>
+                <th scope="col">Devolver até</th>
+                <th scope="col">Situação</th>
+              </tr>
+            </thead>
+            <tbody id="emprestimos-consolidado-tbody"></tbody>
+          </table>
+        </div>
+      </main>
+
+      <footer class="rodape-site">
+        <p>BiblioTech para docentes: visibilidade rápida sobre empréstimos, prazos e acompanhamento dos estudantes.</p>
+      </footer>
+    </div>
+
+    <script src="js/mock.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/emprestimos-docente.js"></script>
+  </body>
+</html>

@@ -1,0 +1,13 @@
+/**
+ * docente-emprestimos.css — Tabela consolidada por aluno
+ */
+
+.pagina-emprestimos-docente .emprestimos-tabela-area {
+  box-shadow: var(--shadow-md);
+}
+
+.pagina-emprestimos-docente .tabela-dados td:nth-child(3) {
+  font-variant-numeric: tabular-nums;
+  color: var(--muted);
+  font-weight: 500;
+}

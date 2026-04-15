@@ -1,0 +1,298 @@
+/**
+ * login.css — Tela de autenticação (fundo escuro + cartão claro)
+ * Mantém #form-login, .login-erro e classes usados por login.js.
+ */
+
+.pagina-login {
+  min-height: 100vh;
+  background-color: #020617;
+  background-image: radial-gradient(ellipse 120% 80% at 50% -20%, rgb(16 185 129 / 0.15) 0%, transparent 50%),
+    radial-gradient(ellipse 60% 40% at 100% 100%, rgb(5 150 105 / 0.12) 0%, transparent 45%),
+    linear-gradient(165deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+}
+
+.pagina-login .layout-pagina {
+  min-height: 100vh;
+}
+
+/* Cabeçalho integrado ao fundo (sem barra branca) */
+.topo-site--transparente-login {
+  position: relative;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+}
+
+.login-conteudo {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem clamp(1rem, 3vw, 1.75rem) 2.5rem;
+  scroll-margin-top: 1rem;
+}
+
+.login-grade {
+  width: 100%;
+  max-width: 1024px;
+  display: grid;
+  gap: 2rem;
+}
+
+@media (min-width: 900px) {
+  .login-grade {
+    grid-template-columns: 1fr 1.05fr;
+    align-items: center;
+    gap: 3rem;
+  }
+}
+
+.login-sobretitulo {
+  margin: 0 0 0.5rem;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgb(110 231 183 / 0.9);
+  font-family: var(--font);
+}
+
+.login-lateral {
+  color: rgb(248 250 252 / 0.92);
+}
+
+.login-lateral h1 {
+  font-size: clamp(1.75rem, 3vw, 2.25rem);
+  margin: 0 0 1rem;
+  color: #fff;
+  font-weight: 800;
+  letter-spacing: var(--track-tight);
+  line-height: 1.15;
+}
+
+.login-lateral p {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.65;
+  color: rgb(226 232 240 / 0.88);
+}
+
+.login-lista-beneficios {
+  margin: 1.75rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.login-lista-beneficios li {
+  position: relative;
+  padding: 0.6rem 0 0.6rem 1.5rem;
+  margin: 0;
+  font-size: 0.9375rem;
+  color: rgb(226 232 240 / 0.85);
+  border-bottom: 1px solid rgb(255 255 255 / 0.06);
+}
+
+.login-lista-beneficios li:last-child {
+  border-bottom: none;
+}
+
+.login-lista-beneficios li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent-hover);
+  box-shadow: 0 0 0 3px rgb(16 185 129 / 0.25);
+}
+
+/* Cartão do formulário — elevação + borda suave */
+.login-cartao {
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  padding: clamp(1.5rem, 4vw, 2rem);
+  box-shadow: var(--shadow-lg), 0 0 0 1px rgb(255 255 255 / 0.5) inset;
+  border: 1px solid var(--border);
+  animation: login-cartao-in 0.55s var(--ease-out) both;
+}
+
+@keyframes login-cartao-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.99);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .login-cartao {
+    animation: none;
+  }
+}
+
+.login-cartao h2 {
+  margin: 0 0 0.35rem;
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--text);
+  letter-spacing: var(--track-tight);
+}
+
+.login-subtitulo {
+  margin: 0 0 1.5rem;
+  font-size: 0.9375rem;
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+.login-formulario {
+  display: flex;
+  flex-direction: column;
+  gap: 1.125rem;
+}
+
+.login-rotulo {
+  display: block;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: var(--track-wide);
+  color: var(--muted);
+  margin-bottom: 0.35rem;
+}
+
+.login-campo {
+  width: 100%;
+  padding: 0.8125rem 1rem;
+  font-size: 1rem;
+  font-family: inherit;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: #f8fafc;
+  color: var(--text);
+  transition: border-color var(--duration) var(--ease-out), box-shadow var(--duration) var(--ease-out),
+    background var(--duration) var(--ease-out);
+}
+
+.login-campo:hover {
+  border-color: var(--border-strong);
+}
+
+.login-campo:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-ring);
+  background: #fff;
+}
+
+.login-erro {
+  margin: 0 0 0.25rem;
+  padding: 0.75rem 0.875rem;
+  border-radius: var(--radius-sm);
+  background: var(--danger-soft);
+  color: var(--danger);
+  font-size: 0.875rem;
+  font-weight: 600;
+  border: 1px solid rgb(239 68 68 / 0.2);
+}
+
+.login-botao-enviar {
+  width: 100%;
+  margin-top: 0.25rem;
+  padding: 0.875rem 1rem;
+  font-size: 1rem;
+}
+
+.login-dica-credenciais {
+  margin-top: 1.5rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--border);
+}
+
+.login-dica-credenciais summary {
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.8125rem;
+  color: var(--muted);
+  transition: color var(--duration) var(--ease-out);
+  list-style-position: outside;
+}
+
+.login-dica-credenciais summary:hover {
+  color: var(--accent);
+}
+
+.login-tabela-dados-envoltorio {
+  overflow-x: auto;
+  margin-top: 0.75rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+}
+
+.login-tabela-credenciais {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.8125rem;
+  background: #f8fafc;
+}
+
+.login-tabela-credenciais th,
+.login-tabela-credenciais td {
+  padding: 0.5rem 0.65rem;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+}
+
+.login-tabela-credenciais th {
+  color: var(--muted);
+  font-weight: 700;
+  font-size: 0.625rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  background: #f1f5f9;
+}
+
+.login-tabela-credenciais tr:last-child td {
+  border-bottom: none;
+}
+
+.login-tabela-credenciais code {
+  font-size: 0.75rem;
+  font-family: ui-monospace, "Cascadia Code", monospace;
+  background: #fff;
+  padding: 0.15rem 0.4rem;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+  color: var(--accent);
+}
+
+.login-voltar-link {
+  margin-top: 1.25rem;
+  text-align: center;
+  font-size: 0.875rem;
+}
+
+.login-voltar-link a {
+  color: var(--muted);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.login-voltar-link a:hover {
+  color: var(--accent);
+  text-decoration: underline;
+}
+
+.pagina-login .rodape-site {
+  background: transparent;
+  border: none;
+  border-top: 1px solid rgb(255 255 255 / 0.06);
+  color: rgb(148 163 184 / 0.85);
+}

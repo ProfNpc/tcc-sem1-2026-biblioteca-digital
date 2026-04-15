@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 400" width="300" height="400">
+  <defs>
+    <linearGradient id="calc-bg" x1="100%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#0369a1"/>
+      <stop offset="100%" stop-color="#0c4a6e"/>
+    </linearGradient>
+  </defs>
+  <rect width="300" height="400" fill="url(#calc-bg)"/>
+  <text x="24" y="56" fill="#7dd3fc" font-family="ui-monospace,monospace" font-size="42" font-weight="700" opacity="0.9">&#8747;</text>
+  <text x="24" y="88" fill="#bae6fd" font-family="system-ui,sans-serif" font-size="11" font-weight="700" letter-spacing="0.25em">CALCULO</text>
+  <path d="M24 200 Q80 160 150 200 T276 180" fill="none" stroke="#38bdf8" stroke-width="3" stroke-linecap="round" opacity="0.85"/>
+  <path d="M24 240 Q100 200 180 240 T276 220" fill="none" stroke="#0ea5e9" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
+  <text x="24" y="300" fill="#f0f9ff" font-family="Georgia,serif" font-size="26" font-weight="700">Calculo I</text>
+  <text x="24" y="330" fill="#bae6fd" font-family="Georgia,serif" font-size="14">Volume unico</text>
+  <text x="24" y="372" fill="#7dd3fc" font-family="system-ui,sans-serif" font-size="10" letter-spacing="0.12em">JAMES STEWART</text>
+</svg>

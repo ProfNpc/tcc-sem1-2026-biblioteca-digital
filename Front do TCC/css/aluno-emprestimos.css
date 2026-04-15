@@ -1,0 +1,29 @@
+/**
+ * aluno-emprestimos.css — Tabela “Meus empréstimos” (reforço de hierarquia nas datas)
+ */
+
+.pagina-emprestimos-aluno .emprestimos-tabela-area {
+  box-shadow: var(--shadow-md);
+}
+
+.pagina-emprestimos-aluno .tabela-dados td:nth-child(3) {
+  font-variant-numeric: tabular-nums;
+  color: var(--muted);
+  font-weight: 500;
+}
+
+.pagina-emprestimos-aluno .tabela-dados td:last-child {
+  width: 1%;
+  white-space: nowrap;
+}
+
+.emprestimos-acao {
+  min-width: 104px;
+}
+
+.emprestimos-vazio {
+  text-align: center;
+  color: var(--muted);
+  padding: 1.5rem 1rem !important;
+  font-weight: 500;
+}
