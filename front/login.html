@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - BiblioTech</title>
+    <!-- Usa o mesmo estilo azul agora -->
+    <link rel="stylesheet" href="style.css">
+    <script src="i18n.js"></script>
+</head>
+<body>
+    <header>
+        <h1>BiblioTech</h1>
+        <nav>
+            <a href="index.html" data-i18n="nav-catalogo">Catálogo</a>
+            <a href="login.html" data-i18n="nav-login">Login</a>
+            <div class="lang-toggles">
+                <button id="btn-lang-pt" class="lang-btn lang-ativo" onclick="mudarIdioma('pt')"><img src="https://flagcdn.com/w20/br.png" alt="BR"> PT</button>
+                <button id="btn-lang-en" class="lang-btn" onclick="mudarIdioma('en')"><img src="https://flagcdn.com/w20/us.png" alt="US"> EN</button>
+            </div>
+        </nav>
+    </header>
+
+    <div class="login-split-container">
+        <!-- Lado esquerdo: Imagem / Branding -->
+        <div class="login-split-left">
+            <div class="login-split-content">
+                <h2 data-i18n="split-titulo">Bem-vindo à BiblioTech</h2>
+                <p data-i18n="split-desc">O conhecimento do mundo na palma da sua mão. Acesse o nosso acervo e evolua com a gente.</p>
+            </div>
+        </div>
+
+        <!-- Lado direito: O Formulario -->
+        <div class="login-split-right">
+            <!-- BLOCO ESCOLHA DE PERFIL (GATEWAY) -->
+            <div class="caixa-login" id="bloco-escolha">
+                <h2 data-i18n="escolha-titulo">Onde você deseja entrar?</h2>
+                <div class="escolha-botoes" style="display:flex; flex-direction:column; margin-top:30px;">
+                    <button onclick="escolherPortal('ALUNO')" class="btn-escolha" data-i18n="btn-sou-aluno">📚 Portal do Aluno</button>
+                    <button onclick="escolherPortal('ADMIN')" class="btn-escolha admin" data-i18n="btn-sou-admin">⚙️ Painel Administrativo</button>
+                    
+                    <p class="alternar-form">
+                        <span data-i18n="cad-header">Não tem conta?</span> 
+                        <a href="#" onclick="alternarTela('cadastro')" data-i18n="cad-link">Cadastre-se</a>
+                    </p>
+                </div>
+            </div>
+
+            <!-- BLOCO DE LOGIN -->
+            <div class="caixa-login" id="bloco-login" style="display:none;">
+                <h2 id="titulo-dinamico-login" data-i18n="login-titulo-aluno">Acesso Restrito - Aluno</h2>
+                <form id="form-login">
+                    <div class="campo-agrupado">
+                        <label for="ra" data-i18n="login-label-ra">RA do Aluno</label>
+                        <input type="text" id="ra" placeholder="Digite seu RA" data-i18n="place-ra" required>
+                    </div>
+                    
+                    <div class="campo-agrupado">
+                        <label for="senha" data-i18n="login-label-senha">Senha</label>
+                        <input type="password" id="senha" placeholder="Sua senha secreta" data-i18n="place-senha" required>
+                    </div>
+
+                    <button type="submit" class="btn-login" data-i18n="login-btn">Acessar</button>
+                    <p id="login-erro"></p>
+                    
+                    <p class="alternar-form">
+                        <a href="#" onclick="alternarTela('escolha')" data-i18n="btn-voltar">← Trocar Portal</a>
+                    </p>
+                </form>
+            </div>
+
+            <!-- BLOCO DE CADASTRO OCULTO POR PADRÃO -->
+            <div class="caixa-login" id="bloco-cadastro" style="display: none;">
+                <h2 data-i18n="cad-titulo">Criar Nova Conta</h2>
+                <form id="form-cadastro">
+                    <div class="campo-agrupado">
+                        <label for="cad-nome" data-i18n="cad-label-nome">Nome Completo</label>
+                        <input type="text" id="cad-nome" placeholder="Ex: João da Silva" data-i18n="place-nome" required>
+                    </div>
+                    
+                    <div class="campo-agrupado">
+                        <label for="cad-ra" data-i18n="login-label-ra">RA do Aluno</label>
+                        <input type="text" id="cad-ra" placeholder="Digite seu RA" data-i18n="place-ra" required>
+                    </div>
+                    
+                    <div class="campo-agrupado">
+                        <label for="cad-senha" data-i18n="login-label-senha">Senha</label>
+                        <input type="password" id="cad-senha" placeholder="Sua senha secreta" data-i18n="place-senha" required>
+                    </div>
+
+
+
+                    <button type="submit" class="btn-login" data-i18n="cad-btn">Registrar e Acessar</button>
+                    <p id="cad-erro"></p>
+                    
+                    <p class="alternar-form">
+                        <a href="#" onclick="alternarTela('escolha')" data-i18n="log-link">Já tem conta? Entrar</a>
+                    </p>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- O Javascript da conexão integrado direto aqui pra não ter arquivos perdidos -->
+    <script>
+        let intencaoLogin = "ALUNO";
+
+        // Função para alternar as caixas
+        function alternarTela(tela) {
+            document.getElementById('login-erro').textContent = '';
+            document.getElementById('cad-erro').textContent = '';
+            
+            document.getElementById('bloco-escolha').style.display = 'none';
+            document.getElementById('bloco-login').style.display = 'none';
+            document.getElementById('bloco-cadastro').style.display = 'none';
+
+            if(tela === 'cadastro') {
+                document.getElementById('bloco-cadastro').style.display = 'block';
+            } else if (tela === 'login') {
+                document.getElementById('bloco-login').style.display = 'block';
+            } else {
+                document.getElementById('bloco-escolha').style.display = 'block';
+            }
+        }
+
+        // Função do Botão Grande
+        function escolherPortal(perfil) {
+            intencaoLogin = perfil;
+            if (perfil === 'ADMIN') {
+                document.getElementById('titulo-dinamico-login').setAttribute('data-i18n', 'login-titulo-admin');
+            } else {
+                document.getElementById('titulo-dinamico-login').setAttribute('data-i18n', 'login-titulo-aluno');
+            }
+            // Forçar o text content na hora
+            const idiomaAtual = localStorage.getItem('idiomaSelecionado') || 'pt';
+            aplicarIdioma(idiomaAtual); 
+            
+            alternarTela('login');
+        }
+
+        // Lógica de Login
+        document.getElementById('form-login').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const raAluno = document.getElementById('ra').value;
+            const senhaAluno = document.getElementById('senha').value;
+            const erroMensagem = document.getElementById('login-erro');
+
+            fetch("http://localhost:8080/api/alunos/login", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ ra: raAluno, senha: senhaAluno })
+            })
+            .then(resposta => {
+                if(!resposta.ok) throw new Error("Erro Local de Login");
+                return resposta.json();
+            })
+            .then(aluno => {
+                // Checa se quem clicou que é Admin realmente é admin no banco de dados!
+                if (intencaoLogin === 'ADMIN' && aluno.perfil !== 'ADMIN') {
+                    throw new Error("NegadoPerfil");
+                }
+
+                sessionStorage.setItem("userLogado", aluno.nome);
+                sessionStorage.setItem("userPerfil", aluno.perfil || "ALUNO"); 
+                window.location.href = "index.html"; 
+            })
+            .catch(erro => {
+                if(erro.message === "NegadoPerfil") {
+                    erroMensagem.textContent = getTexto('login-erro-perfil');
+                } else {
+                    erroMensagem.textContent = getTexto('login-erro-api');
+                }
+            });
+        });
+
+        // Lógica de Cadastro Novo
+        document.getElementById('form-cadastro').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const nome = document.getElementById('cad-nome').value;
+            const ra = document.getElementById('cad-ra').value;
+            const senha = document.getElementById('cad-senha').value;
+            const perfil = "ALUNO"; // Cadastro público é sempre ALUNO
+            const erroMensagem = document.getElementById('cad-erro');
+
+            fetch("http://localhost:8080/api/alunos", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ nome: nome, ra: ra, senha: senha, email: "novo@tcc.com", perfil: perfil })
+            })
+            .then(resposta => {
+                if(!resposta.ok) throw new Error("Erro de API.");
+                return resposta.json();
+            })
+            .then(novoAluno => {
+                // Ao criar com sucesso, já faz o auto-login pra ele!
+                sessionStorage.setItem("userLogado", novoAluno.nome);
+                sessionStorage.setItem("userPerfil", novoAluno.perfil);
+                window.location.href = "index.html"; 
+            })
+            .catch(erro => {
+                erroMensagem.textContent = getTexto('cad-erro-api');
+            });
+        });
+    </script>
+</body>
+</html>

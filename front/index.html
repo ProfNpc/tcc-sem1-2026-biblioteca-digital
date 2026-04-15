@@ -3,65 +3,855 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Biblioteca Digital</title>
+    <title>BiblioTech</title>
     <link rel="stylesheet" href="style.css">
+    <script src="i18n.js"></script>
 </head>
 <body>
     
+    <div id="toast-container"></div>
+    
     <header>
-        <h1>Biblioteca Digital</h1>
+        <h1>BiblioTech</h1>
         <nav>
-            <a href="#">Home</a>
-            <a href="#">Livros</a>
-            <a href="#">Sobre</a>
-            <a href="#">Contato</a>
-            <a href="#">Login</a>
+            <a href="#" onclick="mostrarSeccao('CATALOGO')" id="link-home" data-i18n="nav-catalogo">Início</a>
+            <a href="#" onclick="mostrarSeccao('ACERVO')" id="link-acervo" style="display:none;" data-i18n="nav-acervo">Catálogo de Livros</a>
+            <a href="#" onclick="mostrarSeccao('RESERVAS')" id="link-reservas" style="display:none;" data-i18n="nav-reservas">Minhas Reservas</a>
+            <a href="#" onclick="mostrarSeccao('ADMIN_RESERVAS')" id="link-admin-reservas" style="display:none;" data-i18n="admin-res-titulo">Gestão de Reservas</a>
+            
+            <span id="nav-login-area">
+                <a href="login.html" data-i18n="nav-login">Login</a>
+            </span>
+            
+            <div class="lang-toggles">
+                <button id="btn-lang-pt" class="lang-btn lang-ativo" onclick="mudarIdioma('pt')"><img src="https://flagcdn.com/w20/br.png" alt="BR"> PT</button>
+                <button id="btn-lang-en" class="lang-btn" onclick="mudarIdioma('en')"><img src="https://flagcdn.com/w20/us.png" alt="US"> EN</button>
+            </div>
         </nav>
     </header>
 
-    <section class="hero">
-        <h2>Educação e Leitura acessível para todos</h2>
-        <p>Explore uma variedade de livros gratuitos que sua escola oferece e aprenda sem limites!</p>
-        <button>Explorar Livros</button>
-    </section>
+    <main>
 
-    <section class="catalogo">
-        <h2>Livros Disponiveis</h2>
 
-        <div class="cards">
+    <section class="catalogo" id="secao-catalogo">
+        <h2 data-i18n="cat-titulo" style="text-align: center; font-size: 2.2rem; color: #1e293b; margin-bottom: 30px;">Destaques</h2>
 
-          <div class="card">
-            <img src="asseds/OPHS.jpg" alt="">
-            <h3>Um livro para todos os dias</h3>
-            <p>Autor: Isabel Minhós Martins</p>
-            <button>Fazer Reserva</button>
-          </div>
-
-          <div class="card">
-            <img src="asseds/OPHS.jpg" alt="">
-            <h3>Um livro para todos os dias 2</h3>
-            <p>Autor: Isabel Minhós Martins</p>
-            <button>Fazer Reserva</button>
-          </div>
-
-          <div class="card">
-            <img src="asseds/OPHS.jpg" alt="">
-            <h3>Um livro para todos os dias3</h3>
-            <p>Autor: Isabel Minhós Martins</p>
-            <button>Fazer Reserva</button>
-          </div>
-
+        <div class="carousel-wrapper">
+            <div class="cards carousel-track" id="container-livros">
+                <p style="width:100%; text-align:center;" data-i18n="cat-loading">Carregando livros do Back-end...</p>
+            </div>
+        </div>
+        
+        <div class="carousel-controls-bottom">
+            <button class="carousel-btn" onclick="rolarCarrossel(-340)">❮</button>
+            <button class="carousel-btn" onclick="rolarCarrossel(340)">❯</button>
         </div>
 
     </section>
 
-    <section class="Sobre">
-        <h2>Sobre Nós</h2>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sunt omnis officiis tempora sint quis at. Architecto ipsam eveniet modi molestias voluptatibus dolor, ut dicta, enim, ea quae vitae blanditiis sed!</p>
+    <!-- ACERVO COMPLETO (SPA: Aberto via Menu) -->
+    <section class="acervo" id="secao-acervo" style="display:none; padding: 60px 40px; background: #ffffff;">
+        <h2 data-i18n="acervo-titulo" style="text-align: center; font-size: 2.2rem; color: #1e293b; margin-bottom: 20px;">Catálogo de Livros</h2>
+        
+        <div class="search-container" style="max-width: 800px;">
+            <input type="text" id="busca-livro" placeholder="Buscar no catálogo por título, autor ou gênero..." autocomplete="off" onkeyup="filtrarLivrosGrid()">
+        </div>
+
+        <div class="acervo-grid" id="container-acervo-grid">
+            <p style="width:100%; text-align:center; grid-column: 1 / -1; font-weight: 500;" data-i18n="cat-loading">Carregando acervo do Back-end...</p>
+        </div>
     </section>
 
+    <!-- ONBOARDING DIDÁTICO / COMO FUNCIONA -->
+    <section class="como-funciona" id="como-funciona">
+        <h2 data-i18n="func-titulo">Como a Biblioteca Funciona?</h2>
+        <div class="como-grids">
+            <div class="passo-card">
+                <h3 data-i18n="func-passo1">🔍 1. Explore e Escolha</h3>
+                <p data-i18n="func-desc1">Navegue pelo nosso acervo inteligente e escolha o livro ideal para sua pesquisa.</p>
+            </div>
+            <div class="passo-card">
+                <h3 data-i18n="func-passo2">🔐 2. Autentique-se</h3>
+                <p data-i18n="func-desc2">Para segurança do acervo, as reservas exigem um Cadastro ou Login obrigatório.</p>
+            </div>
+            <div class="passo-card">
+                <h3 data-i18n="func-passo3">📅 3. Reserve e Retire</h3>
+                <p data-i18n="func-desc3">Com 1 clique o livro é seu! Dirija-se até a portaria do seu polo em até 24h para retirar.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="sec-reservas" id="secao-reservas" style="display:none;">
+        <h2 data-i18n="res-titulo">Livros Reservados</h2>
+        <table class="tabela-glass">
+            <thead>
+                <tr>
+                    <th data-i18n="tab-livro">Livro</th>
+                    <th data-i18n="tab-data">Data da Reserva</th>
+                    <th data-i18n="tab-limite">Entrega Limite</th>
+                    <th data-i18n="tab-local">Retirada</th>
+                    <th data-i18n="tab-status">Situação</th>
+                    <th data-i18n="tab-acao">Ações</th>
+                </tr>
+            </thead>
+            <tbody id="corpo-tabela-reservas">
+                <!-- Javascript do Banco VAI INJETAR AQUI -->
+            </tbody>
+        </table>
+    </section>
+
+    <section class="estatisticas">
+        <div class="stat-item">
+            <span class="stat-num" data-target="1500">0</span>
+            <span class="stat-label" data-i18n="stat-livros">Acervo Digital</span>
+        </div>
+        <div class="stat-item">
+            <span class="stat-num" data-target="839">0</span>
+            <span class="stat-label" data-i18n="stat-alunos">Alunos Ativos</span>
+        </div>
+        <div class="stat-item">
+            <span class="stat-num" data-target="3">0</span>
+            <span class="stat-label" data-i18n="stat-bib">Polos Parceiros</span>
+        </div>
+    </section>
+
+    <!-- MURAL DE DEPOIMENTOS -->
+    <section class="depoimentos" id="depoimentos">
+        <h2 data-i18n="depo-titulo" style="text-align: center; font-size: 2.2rem; color: #1e293b; margin-bottom: 30px;">O que dizem sobre nós</h2>
+        <div class="carousel-wrapper">
+            <div class="cards carousel-track" id="container-depoimentos">
+                
+                <div class="depoimento-card">
+                    <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=150&q=80" alt="Prof Márcia" class="depo-foto">
+                    <p data-i18n="depo-1-texto">"Recomendo fortemente aos alunos a plataforma para retirar clássicos de literatura necessários na minha disciplina de Artes."</p>
+                    <h4 data-i18n="depo-1-autor">- Prof. Márcia C.</h4>
+                </div>
+                
+                <div class="depoimento-card">
+                    <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=150&q=80" alt="Lucas Barbosa" class="depo-foto">
+                    <p data-i18n="depo-2-texto">"O sistema de reservas agilizou toda a minha pesquisa que precisava fazer de madrugada para as matérias da grade de engenharia!"</p>
+                    <h4 data-i18n="depo-2-autor">- Lucas T., Aluno Eng.</h4>
+                </div>
+                
+                <div class="depoimento-card">
+                    <img src="https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=150&q=80" alt="Ana Souza" class="depo-foto">
+                    <p data-i18n="depo-3-texto">"Muito fácil de navegar. Consigo encontrar livros de medicina com dois cliques, sensacional o projeto da biblioteca."</p>
+                    <h4 data-i18n="depo-3-autor">- Ana S., Aluna Med.</h4>
+                </div>
+                
+                <div class="depoimento-card">
+                    <img src="https://images.unsplash.com/photo-1557862921-37829c790f19?auto=format&fit=crop&w=150&q=80" alt="Carlos Ribeiro" class="depo-foto">
+                    <p data-i18n="depo-4-texto">"A integração com o catálogo da biblioteca central é perfeita. Consigo ver exatamente o que está disponível na FIEB."</p>
+                    <h4 data-i18n="depo-4-autor">- Carlos R., Aluno TI.</h4>
+                </div>
+                
+                <div class="depoimento-card">
+                    <img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=150&q=80" alt="Mariana L." class="depo-foto">
+                    <p data-i18n="depo-5-texto">"Material excelente e interface absurdamente rápida. O layout do site me surpreendeu positivamente."</p>
+                    <h4 data-i18n="depo-5-autor">- Mariana L., Profª História.</h4>
+                </div>
+                
+                <div class="depoimento-card">
+                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150&q=80" alt="Felipe M." class="depo-foto">
+                    <p data-i18n="depo-6-texto">"Revolucionou a forma de estudar para o TCC. Sem burocracia, apenas o conhecimento a um clique de distância."</p>
+                    <h4 data-i18n="depo-6-autor">- Felipe M., Aluno Adm.</h4>
+                </div>
+                
+            </div>
+        </div>
+        
+        <div class="carousel-controls-bottom">
+            <button class="carousel-btn" onclick="rolarCarrosselDepoimentos(-340)">❮</button>
+            <button class="carousel-btn" onclick="rolarCarrosselDepoimentos(340)">❯</button>
+        </div>
+    </section>
+
+    <!-- GALERIA DE POLOS PARCEIROS -->
+    <section class="polos-parceiros" id="polos">
+        <h2 data-i18n="polos-titulo">Nossos Polos Parceiros</h2>
+        <div class="polos-grid">
+            <div class="polo-card" onclick="abrirMapa('R. Interna Grupo Bandeirante, 138 - Jardim Belval, Barueri - SP, 06420-150')" style="cursor: pointer;" title="Ver trajeto no Google Maps!">
+                <img src="img/ITB Brasílio Flores de Azevedo.png" alt="ITB Brasílio Flores de Azevedo">
+                <h3 data-i18n="polo-1">ITB Brasílio Flores de Azevedo</h3>
+                <p data-i18n="polo-1-desc" style="font-size: 0.9rem; color: #475569; padding: 0 10px; padding-bottom: 15px;">Jardim Belval</p>
+            </div>
+            <div class="polo-card" onclick="abrirMapa('Estr. Velha de Itapevi, 2679 - Jardim Paulista, Barueri - SP, 06444-000')" style="cursor: pointer;" title="Ver trajeto no Google Maps!">
+                <img src="img/ITB Prof. Munir José.png" alt="ITB Prof. Munir José">
+                <h3 data-i18n="polo-2">ITB Prof. Munir José</h3>
+                <p data-i18n="polo-2-desc" style="font-size: 0.9rem; color: #475569; padding: 0 10px; padding-bottom: 15px;">Jardim Paulista</p>
+            </div>
+            <div class="polo-card" onclick="abrirMapa('Rua do ITB, 238 - Vila Engenho Novo, Barueri - SP, 06415-080')" style="cursor: pointer;" title="Ver trajeto no Google Maps!">
+                <img src="img/ITB Profª Maria Sylvia Chaluppe Mello (Engenho Novo).png" alt="ITB Profª Maria Sylvia Chaluppe Mello">
+                <h3 data-i18n="polo-3">ITB Profª Maria Sylvia</h3>
+                <p data-i18n="polo-3-desc" style="font-size: 0.9rem; color: #475569; padding: 0 10px; padding-bottom: 15px;">Engenho Novo</p>
+            </div>
+            <div class="polo-card" onclick="abrirMapa('R. Abelardo Luz, 86 - Jardim Mutinga, Barueri - SP, 06463-260')" style="cursor: pointer;" title="Ver trajeto no Google Maps!">
+                <img src="img/ITB Profº Hércules Alves de Oliveira (Jardim Mutinga).png" alt="ITB Profº Hércules Alves de Oliveira">
+                <h3 data-i18n="polo-4">ITB Profº Hércules Alves</h3>
+                <p data-i18n="polo-4-desc" style="font-size: 0.9rem; color: #475569; padding: 0 10px; padding-bottom: 15px;">Jardim Mutinga</p>
+            </div>
+            <div class="polo-card" onclick="abrirMapa('R. Tomé de Souza, 259 - Parque Imperial, Barueri - SP, 06462-040')" style="cursor: pointer;" title="Ver trajeto no Google Maps!">
+                <img src="img/ITB Profº Moacyr Domingos Sávio Veronezi.png" alt="ITB Profº Moacyr Domingos Sávio Veronezi">
+                <h3 data-i18n="polo-5">ITB Profº Moacyr Domingos</h3>
+                <p data-i18n="polo-5-desc" style="font-size: 0.9rem; color: #475569; padding: 0 10px; padding-bottom: 15px;">Parque Imperial</p>
+            </div>
+        </div>
+    </section>
+    
+    </main>
+
     <footer>
-        <p></p>
+        <div class="footer-links">
+            <a href="#sobre" data-i18n="foot-quem">Quem somos</a>
+            <a href="#" data-i18n="foot-fale">Fale conosco</a>
+            <a href="#" data-i18n="foot-faq">FAQ</a>
+            <a href="#" data-i18n="foot-creditos">Créditos</a>
+            <a href="#" data-i18n="foot-politica">Política de privacidade</a>
+        </div>
+        <p data-i18n="footer-texto">&copy; 2026 Biblioteca Digital TCC. Todos os direitos reservados.</p>
     </footer>
+
+    <!-- MODAL DO MAPA GEO-ESPACIAL FLUTUANTE -->
+    <div class="map-modal-overlay" id="map-modal" onclick="fecharMapa(event)">
+        <div class="map-modal-content">
+            <button class="close-map-btn" onclick="fecharMapa(event)">X</button>
+            <iframe class="map-iframe" id="google-map-iframe" loading="lazy" allowfullscreen></iframe>
+        </div>
+    </div>
+
+    <!-- MODAL DE ESCOLHA DE POLO -->
+    <div class="map-modal-overlay" id="polo-modal" onclick="fecharPoloModal(event)">
+        <div class="map-modal-content" style="padding: 30px; text-align: center; max-width: 450px; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px);">
+            <button class="close-map-btn" style="top: 15px; right: 15px; background: #ef4444; color: white;" onclick="fecharPoloModal(event)">X</button>
+            <h3 style="margin-bottom: 20px; color: #1e293b; font-size: 1.5rem;">🏠 Onde você quer retirar?</h3>
+            <p style="color: #64748b; margin-bottom: 20px;">Selecione abaixo a unidade do ITB mais próxima de você para buscar o livro amanhã.</p>
+            
+            <select id="select-polo" onchange="atualizarInfoPolo()" style="width: 100%; padding: 12px; margin-bottom: 20px; font-size: 1rem; border-radius: 8px; border: 1px solid #cbd5e1; outline: none; background: #f8fafc; color: #334155; font-weight: 500;">
+                <option value="ITB Brasílio Flores de Azevedo">ITB Brasílio Flores de Azevedo (Belval)</option>
+                <option value="ITB Prof. Munir José">ITB Prof. Munir José (Paulista)</option>
+                <option value="ITB Profª Maria Sylvia Chaluppe Mello">ITB Profª Maria Sylvia (Engenho Novo)</option>
+                <option value="ITB Profº Hércules Alves de Oliveira">ITB Profº Hércules Alves (Mutinga)</option>
+                <option value="ITB Profº Moacyr Domingos Sávio Veronezi">ITB Profº Moacyr Domingos (Pq Imperial)</option>
+            </select>
+            
+            <div id="polo-info-container" style="transition: opacity 0.3s ease; padding: 10px; background: #f1f5f9; border-radius: 12px; margin-bottom: 25px; min-height: 110px; display: flex; flex-direction: column; align-items: center;">
+                <img id="polo-img-preview" src="img/ITB Brasílio Flores de Azevedo.png" alt="Polo ITB" style="width: 100%; max-height: 160px; object-fit: cover; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-bottom: 15px;">
+                <p id="polo-endereco-preview" style="font-size: 0.85rem; color: #475569; font-weight: 500; display: flex; align-items: center; justify-content: center; margin: 0; text-align: center;">
+                    📍 R. Interna Grupo Bandeirante, 138 - Jardim Belval, Barueri - SP
+                </p>
+            </div>
+            
+            <button id="btn-confirmar-polo" style="background: #2563eb; color: white; border: none; padding: 12px 24px; font-size: 1.1rem; font-weight: bold; border-radius: 30px; cursor: pointer; width: 100%; transition: 0.3s;" onmouseover="this.style.background='#1d4ed8'" onmouseout="this.style.background='#2563eb'">Confirmar Reserva</button>
+        </div>
+    </div>
+
+    <!-- SEÇÃO EXCLUSIVA DO ADMIN (Gestão de Reservas) -->
+    <section class="sec-admin-reservas" id="secao-admin-reservas" style="display:none;">
+        <h2 data-i18n="admin-res-titulo">Gestão Global de Reservas</h2>
+        <table class="tabela-glass">
+            <thead>
+                <tr>
+                    <th data-i18n="col-aluno">Estudante</th>
+                    <th data-i18n="col-livro">Livro</th>
+                    <th data-i18n="col-polo">Polo de Retirada</th>
+                    <th data-i18n="tab-status">Situação</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody id="tabela-admin-reservas">
+                <!-- Injetado via JS -->
+            </tbody>
+        </table>
+    </section>
+
+    <!-- MODAL DE CONFIRMAÇÃO DE CANCELAMENTO DE RESERVA (EVOLUÍDO) -->
+    <div class="map-modal-overlay" id="confirm-modal" onclick="fecharConfirmModal(event)" style="z-index: 10001;">
+        <div class="map-modal-content modal-danger">
+            <div class="modal-icon-header">
+                <div class="icon-circle">⚠️</div>
+            </div>
+            <h3 style="margin-bottom: 10px; color: #1e293b; font-size: 1.6rem;" data-i18n="conf-titulo">Confirmar Cancelamento</h3>
+            
+            <p id="confirm-msg-dinamica" style="color: #475569; margin-bottom: 30px; line-height: 1.6; font-size: 1.1rem; padding: 0 20px;">
+                <!-- Texto injetado via JS -->
+            </p>
+            
+            <div class="modal-footer-btns">
+                <button onclick="fecharConfirmModal(event, true)" class="btn-secundario" data-i18n="btn-voltar-simples">Voltar</button>
+                <button id="btn-confirmar-cancelamento" class="btn-perigo-gradiente">Sim, Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Função ativada no exato momento que você abrir a tela do site
+        document.addEventListener('DOMContentLoaded', function() {
+            carregarLivrosDaAPI();
+        });
+
+        // Nossa função mágica de integração
+        function carregarLivrosDaAPI() {
+            fetch('http://localhost:8080/api/livros')
+                .then(resposta => resposta.json())
+                .then(livrosMySQL => {
+                    const container = document.getElementById('container-livros');
+                    container.innerHTML = ''; 
+
+                    if(livrosMySQL.length === 0) {
+                        container.innerHTML = `<p style="width:100%; text-align:center;" data-i18n="cat-empty">${getTexto("cat-empty")}</p>`;
+                        return;
+                    }
+
+                    livrosMySQL.forEach((livro, index) => {
+                        
+                        // Lógica Inteligente para imagens baseadas no título
+                        let urlCapa = "";
+                        const termo = livro.titulo.toLowerCase();
+
+                        if (termo.includes("design") || termo.includes("interface")) {
+                            urlCapa = "https://images.unsplash.com/photo-1561070791-2526d30994b5?auto=format&fit=crop&w=400&q=80"; // Cores/Design
+                        } else if (termo.includes("clean code") || termo.includes("engenharia") || termo.includes("algoritmo") || termo.includes("arquitetura")) {
+                            urlCapa = "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=400&q=80"; // Código Fonte Nerd
+                        } else if (termo.includes("1984") || termo.includes("anéis") || termo.includes("casmurro") || termo.includes("nárnia")) {
+                            urlCapa = "https://images.unsplash.com/photo-1608178398319-48f814d0750c?auto=format&fit=crop&w=400&q=80"; // Livro de fantasia gótico espelhado
+                        } else if (termo.includes("harry")) {
+                            urlCapa = "https://images.unsplash.com/photo-1579532537598-459ecdaf39cc?auto=format&fit=crop&w=400&q=80"; // Relíquias/Varinhas magic  
+                        } else {
+                            // Imagem Clássica Elegante de Biblioteca se não tiver nicho específico
+                            urlCapa = "https://images.unsplash.com/photo-1544947950-fa07a98d237f?auto=format&fit=crop&w=400&q=80";
+                        }
+                        
+                        const card = `
+                          <div class="card">
+                            <div class="card-cover-image" style="background-image: url('${urlCapa}');">
+                            </div>
+                            <div class="card-content">
+                                <h3>${livro.titulo}</h3>
+                                <p>Autor: ${livro.autor} <br> Ano: ${livro.anoPublicacao}</p>
+                                <button class="btn-dinamico-reserva" onclick="abrirModalPolo('${livro.titulo.replace(/'/g, "\\'")}')">${getTexto("btn-reservar") || 'Reservar'}</button>
+                            </div>
+                          </div>
+                        `;
+                        container.innerHTML += card; 
+                    });
+                })
+                .catch(erro => {
+                    console.error("Ops, deu ruim ao conectar na API:", erro);
+                    const container = document.getElementById('container-livros');
+                    container.innerHTML = `<p style="color:red; width:100%; text-align:center;" data-i18n="cat-erro">${getTexto("cat-erro")}</p>`;
+                });
+        }
+
+        // Nossa função mágica de integração para ACERVO EM GRADE (Alunos)
+        function carregarAcervoCompleto() {
+            fetch('http://localhost:8080/api/livros')
+                .then(resposta => resposta.json())
+                .then(livrosMySQL => {
+                    const container = document.getElementById('container-acervo-grid');
+                    container.innerHTML = ''; 
+
+                    if(livrosMySQL.length === 0) {
+                        container.innerHTML = `<p style="width:100%; text-align:center;" data-i18n="cat-empty">${getTexto("cat-empty") || 'Nenhum livro cadastrado'}</p>`;
+                        return;
+                    }
+
+                    livrosMySQL.forEach((livro, index) => {
+                        let urlCapa = "";
+                        const termo = livro.titulo.toLowerCase();
+
+                        if (termo.includes("design") || termo.includes("interface") || termo.includes("arte")) {
+                            urlCapa = "https://images.unsplash.com/photo-1561070791-2526d30994b5?auto=format&fit=crop&w=400&q=80"; 
+                        } else if (termo.includes("clean code") || termo.includes("engenharia") || termo.includes("algoritmo") || termo.includes("arquitetura")) {
+                            urlCapa = "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=400&q=80"; 
+                        } else if (termo.includes("1984") || termo.includes("anéis") || termo.includes("casmurro") || termo.includes("nárnia")) {
+                            urlCapa = "https://images.unsplash.com/photo-1608178398319-48f814d0750c?auto=format&fit=crop&w=400&q=80"; 
+                        } else if (termo.includes("harry") || termo.includes("magia")) {
+                            urlCapa = "https://images.unsplash.com/photo-1579532537598-459ecdaf39cc?auto=format&fit=crop&w=400&q=80";   
+                        } else {
+                            urlCapa = "https://images.unsplash.com/photo-1544947950-fa07a98d237f?auto=format&fit=crop&w=400&q=80";
+                        }
+                        
+                        // Badge Disponivel Dinâmico usando Back-end
+                        const disponivel = livro.disponivel !== false; 
+                        const badgeHtml = disponivel 
+                            ? `<span class="badge-disp disp-ok">Disponível</span>`
+                            : `<span class="badge-disp disp-no">Alugado</span>`;
+                            
+                        const btnReserva = disponivel 
+                            ? `<button class="btn-dinamico-reserva" onclick="abrirModalPolo('${livro.titulo.replace(/'/g, "\\'")}')">${getTexto("btn-reservar") || 'Reservar'}</button>`
+                            : `<button class="btn-dinamico-reserva btn-indisponivel" disabled>Indisponível</button>`;
+
+                        const card = `
+                          <div class="card acervo-item">
+                            ${badgeHtml}
+                            <div class="card-cover-image" style="background-image: url('${urlCapa}');"></div>
+                            <div class="card-content">
+                                <h3>${livro.titulo}</h3>
+                                <p>Autor: ${livro.autor} <br> Ano: ${livro.anoPublicacao}</p>
+                                ${btnReserva}
+                            </div>
+                          </div>
+                        `;
+                        container.innerHTML += card; 
+                    });
+                })
+                .catch(erro => console.error("Erro na carga do acervo completo: ", erro));
+        }
+
+        // --- SISTEMA INTELIGENTE DE SESSÃO E RESERVA ---
+        
+        // Verifica se o cara tá logado e altera o Menu na mesma hora!
+        document.addEventListener('DOMContentLoaded', () => {
+            const usuarioLogado = sessionStorage.getItem('userLogado');
+            const userPerfil = sessionStorage.getItem('userPerfil');
+
+            if (usuarioLogado) {
+                document.getElementById('link-acervo').style.display = 'inline';
+                
+                if (userPerfil === 'ADMIN') {
+                    document.getElementById('link-admin-reservas').style.display = 'inline';
+                    mostrarSeccao('ADMIN_RESERVAS');
+                } else {
+                    document.getElementById('link-reservas').style.display = 'inline';
+                    mostrarSeccao('ACERVO');
+                }
+                
+                const linkHome = document.getElementById('link-home');
+                if(linkHome) linkHome.style.display = 'none'; 
+                
+                carregarAcervoCompleto(); 
+                
+                const navLoginArea = document.getElementById('nav-login-area');
+                navLoginArea.innerHTML = `
+                    <span style="color:white; font-weight:bold; margin-right: 15px; margin-left: 20px;">
+                        <span data-i18n="nav-ola">${getTexto("nav-ola") || 'Olá, '}</span>${usuarioLogado.split(" ")[0]} 
+                    </span>
+                    <a href="#" onclick="fazerLogout()" data-i18n="nav-sair" style="background:rgba(255,255,255,0.2); padding: 5px 12px; border-radius:15px; color:white;">Sair</a>
+                `;
+            }
+        });
+
+        // Alternador de Abas Dinamicas SPA (Protegido contra crashes com o helper Safe)
+        function mostrarSeccao(qual) {
+            const safeDisplay = (sel, disp) => { const el = document.querySelector(sel); if(el) el.style.display = disp; };
+            const safeDisplayId = (id, disp) => { const el = document.getElementById(id); if(el) el.style.display = disp; };
+            
+            safeDisplayId('secao-catalogo', 'none');
+            safeDisplayId('secao-acervo', 'none');
+            safeDisplayId('secao-reservas', 'none');
+            safeDisplay('.hero', 'none');
+            safeDisplay('.como-funciona', 'none');
+            safeDisplay('.estatisticas', 'none');
+            safeDisplay('.depoimentos', 'none');
+            safeDisplayId('polos', 'none');
+
+            document.getElementById('toast-container').innerHTML = ''; // Limpa os popups da tela
+
+            if(qual === 'RESERVAS') {
+                safeDisplayId('secao-reservas', 'block');
+                carregarReservas();
+            } else if (qual === 'ADMIN_RESERVAS') {
+                safeDisplayId('secao-admin-reservas', 'block');
+                carregarReservasAdmin();
+            } else if (qual === 'ACERVO') {
+                safeDisplayId('secao-acervo', 'block');
+                safeDisplay('.estatisticas', 'flex'); 
+            } else {
+                safeDisplayId('secao-catalogo', 'block');
+                safeDisplay('.hero', 'block');
+                safeDisplay('.como-funciona', 'block');
+                safeDisplay('.estatisticas', 'flex');
+                safeDisplay('.depoimentos', 'block'); 
+                safeDisplayId('polos', 'block');
+            }
+        }
+
+        let livroPendenteReserva = "";
+
+        const dbPolosMeta = {
+            "ITB Brasílio Flores de Azevedo": {
+                img: "img/ITB Brasílio Flores de Azevedo.png",
+                end: "R. Interna Grupo Bandeirante, 138 - Jardim Belval, Barueri - SP"
+            },
+            "ITB Prof. Munir José": {
+                img: "img/ITB Prof. Munir José.png",
+                end: "Estr. Velha de Itapevi, 2679 - Jardim Paulista, Barueri - SP"
+            },
+            "ITB Profª Maria Sylvia Chaluppe Mello": {
+                img: "img/ITB Profª Maria Sylvia Chaluppe Mello (Engenho Novo).png",
+                end: "Rua do ITB, 238 - Vila Engenho Novo, Barueri - SP"
+            },
+            "ITB Profº Hércules Alves de Oliveira": {
+                img: "img/ITB Profº Hércules Alves de Oliveira (Jardim Mutinga).png",
+                end: "R. Abelardo Luz, 86 - Jardim Mutinga, Barueri - SP"
+            },
+            "ITB Profº Moacyr Domingos Sávio Veronezi": {
+                img: "img/ITB Profº Moacyr Domingos Sávio Veronezi.png",
+                end: "R. Tomé de Souza, 259 - Parque Imperial, Barueri - SP"
+            }
+        };
+
+        function atualizarInfoPolo() {
+            const selecionado = document.getElementById('select-polo').value;
+            const metadado = dbPolosMeta[selecionado];
+            if(metadado) {
+                const imgEl = document.getElementById('polo-img-preview');
+                const endEl = document.getElementById('polo-endereco-preview');
+                // Adicionando um micro-efeito de transição
+                document.getElementById('polo-info-container').style.opacity = 0.5;
+                setTimeout(() => {
+                    imgEl.src = metadado.img;
+                    endEl.innerHTML = `📍 ${metadado.end}`;
+                    document.getElementById('polo-info-container').style.opacity = 1;
+                }, 150);
+            }
+        }
+
+        function abrirModalPolo(tituloDoLivro) {
+            const usuarioLogado = sessionStorage.getItem('userLogado');
+            if (usuarioLogado) {
+                livroPendenteReserva = tituloDoLivro;
+                document.getElementById('polo-modal').classList.add('active'); // Chama o modal Glass
+                atualizarInfoPolo(); // Reseta para exibir o info do Polo que estiver na box no momento de abrir
+            } else {
+                window.location.href = 'login.html';
+            }
+        }
+
+        function fecharPoloModal(evento) {
+            if(evento.target.id === 'polo-modal' || evento.target.classList.contains('close-map-btn')){
+                document.getElementById('polo-modal').classList.remove('active');
+            }
+        }
+
+        // POST do Banco Real Interceptado (Com escolha de Polo)
+        document.getElementById('btn-confirmar-polo')?.addEventListener('click', function() {
+            const usuarioLogado = sessionStorage.getItem('userLogado');
+            const poloEscolhido = document.getElementById('select-polo').value;
+            
+            if (usuarioLogado && livroPendenteReserva) {
+                document.getElementById('polo-modal').classList.remove('active');
+                
+                fetch("http://localhost:8080/api/emprestimos", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ 
+                        nomeAluno: usuarioLogado, 
+                        tituloLivro: livroPendenteReserva,
+                        poloRetirada: poloEscolhido
+                    })
+                })
+                .then(async resposta => {
+                    if (resposta.status === 403) {
+                        const erroTexto = await resposta.text();
+                        throw new Error("LIMITE_ATINGIDO");
+                    }
+                    if(!resposta.ok) throw new Error("Erro Java Banco");
+                    
+                    let msgSucesso = getTexto("msg-reserva") || `{0}, sua reserva do livro {1} foi confirmada!`;
+                    msgSucesso = msgSucesso.replace("{0}", usuarioLogado.split(" ")[0]).replace("{1}", livroPendenteReserva);
+                    mostrarToast(msgSucesso + " Lembre-se de retirar no " + poloEscolhido);
+                    if(document.getElementById('secao-reservas').style.display === 'block') {
+                        carregarReservas(); 
+                    }
+                })
+                .catch(erro => {
+                    if (erro.message === "LIMITE_ATINGIDO") {
+                        mostrarToast(getTexto("res-limite-erro"));
+                    } else {
+                        mostrarToast("⚠️ O servidor Java não conseguiu confirmar sua reserva.");
+                    }
+                });
+            }
+        });
+
+        // GET da Tabela Pessoal
+        function carregarReservas() {
+            const usuario = sessionStorage.getItem('userLogado');
+            if(!usuario) return;
+            
+            fetch(`http://localhost:8080/api/emprestimos/aluno/${usuario}`)
+            .then(r => r.json())
+            .then(lista => {
+                const tbody = document.getElementById('corpo-tabela-reservas');
+                tbody.innerHTML = '';
+                
+                if(lista.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; padding: 20px;" data-i18n="res-vazio">${getTexto("res-vazio") || 'Nenhuma reserva encontrada.'}</td></tr>`;
+                    return;
+                }
+                
+                lista.forEach(emp => {
+                    // Matemática de expiração
+                    const hoje = new Date().getTime();
+                    const dev = new Date(emp.dataDevolucao).getTime();
+                    let cor, txt;
+                    
+                    if (hoje > dev) {
+                        cor = "background:#fee2e2; color:#b91c1c;"; // Vermelho Vencido
+                        txt = getTexto('status-vencido');
+                    } else {
+                        cor = "background:#dcfce7; color:#15803d;"; // Verde Em dia
+                        txt = getTexto('status-apto');
+                    }
+                    
+                    // Converte de YYYY-MM-DD para DD/MM/YYYY
+                    const dataResFormatada = emp.dataReserva.split('-').reverse().join('/');
+                    const dataDevFormatada = emp.dataDevolucao.split('-').reverse().join('/');
+
+                    const linha = `
+                        <tr>
+                            <td>${emp.tituloLivro}</td>
+                            <td>${dataResFormatada}</td>
+                            <td>${dataDevFormatada}</td>
+                            <td style="font-size: 0.9rem; color: #475569;">
+                                ${emp.poloRetirada || 'Não informado'}
+                                ${emp.poloRetirada ? `<br><button onclick="abrirMapa('${dbPolosMeta[emp.poloRetirada]?.end || emp.poloRetirada}')" style="background:none; border:none; color:#2563eb; cursor:pointer; font-size:0.75rem; text-decoration:underline; padding:0;">${getTexto('btn-localizar')}</button>` : ''}
+                            </td>
+                            <td><span class="status-badge" style="${cor}">${txt}</span></td>
+                            <td>
+                                <button onclick="cancelarReserva(${emp.id}, '${emp.tituloLivro.replace(/'/g, "\\'")}')" style="background: #fee2e2; color: #ef4444; border: 1px solid #fecaca; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-weight: bold; transition: 0.3s;" onmouseover="this.style.background='#fecaca'" onmouseout="this.style.background='#fee2e2'">Cancelar</button>
+                            </td>
+                        </tr>
+                    `;
+                    tbody.innerHTML += linha;
+                });
+            })
+            .catch(erro => console.error("Erro ao carregar reservas:", erro));
+        }
+
+        // --- SISTEMA DE GESTÃO ADMINISTRATIVA (MASTER) ---
+        function carregarReservasAdmin() {
+            fetch(`http://localhost:8080/api/emprestimos/todos`)
+            .then(r => r.json())
+            .then(lista => {
+                const tbody = document.getElementById('tabela-admin-reservas');
+                tbody.innerHTML = '';
+                
+                if(lista.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding: 20px;">Nenhuma reserva ativa no sistema.</td></tr>`;
+                    return;
+                }
+                
+                // Ordena por Estudante para facilitar a busca
+                lista.sort((a, b) => a.nomeAluno.localeCompare(b.nomeAluno));
+
+                lista.forEach(emp => {
+                    const statusRetirado = emp.status === 'RETIRADO';
+                    const statusBadge = statusRetirado 
+                        ? `<span class="status-badge-retirado">${getTexto('status-retirado') || '🔵 Retirado'}</span>`
+                        : `<span class="status-badge" style="background:#dcfce7; color:#15803d;">${getTexto('status-apto') || '🟢 Em Dia'}</span>`;
+                    
+                    const btnAcao = statusRetirado 
+                        ? `<button class="btn-entregar-gradiente" style="opacity:0.5; cursor:not-allowed;" disabled>${getTexto('btn-entregar') || 'Entregue'}</button>`
+                        : `<button class="btn-entregar-gradiente" onclick="confirmarEntrega(${emp.id}, '${emp.tituloLivro.replace(/'/g, "\\'")}', '${emp.nomeAluno.replace(/'/g, "\\'")}')">${getTexto('btn-entregar') || 'Confirmar Entrega'}</button>`;
+
+                    const row = `
+                        <tr>
+                            <td><strong>${emp.nomeAluno}</strong></td>
+                            <td>${emp.tituloLivro}</td>
+                            <td><small>📍 ${emp.poloRetirada || 'Não informado'}</small></td>
+                            <td>${statusBadge}</td>
+                            <td>${btnAcao}</td>
+                        </tr>
+                    `;
+                    tbody.innerHTML += row;
+                });
+            })
+            .catch(erro => mostrarToast("⚠️ Erro ao carregar painel administrativo."));
+        }
+
+        function confirmarEntrega(id, titulo, aluno) {
+            fetch(`http://localhost:8080/api/emprestimos/${id}/entregar`, {
+                method: 'POST'
+            })
+            .then(resposta => {
+                if (resposta.ok) {
+                    mostrarToast(`✅ Sucesso! O livro '${titulo}' foi entregue para ${aluno}.`);
+                    carregarReservasAdmin();
+                } else {
+                    mostrarToast("⚠️ Erro ao processar a baixa da reserva.");
+                }
+            })
+            .catch(erro => mostrarToast("⚠️ Erro de conexão ao confirmar entrega."));
+        }
+
+        // --- SISTEMA DE CANCELAMENTO PROFISSIONAL ---
+        let idReservaPendente = null;
+
+        function cancelarReserva(id, titulo) {
+            idReservaPendente = id;
+            
+            const msgElement = document.getElementById('confirm-msg-dinamica');
+            let textoConfirm = getTexto('conf-msg') || "Deseja cancelar a reserva de {0}?";
+            msgElement.innerHTML = textoConfirm.replace("{0}", `<strong style="color:#1e3a8a;">${titulo}</strong>`);
+            
+            document.getElementById('confirm-modal').classList.add('active'); 
+        }
+
+        function fecharConfirmModal(evento, forcarFecha = false) {
+            if (forcarFecha || evento.target.id === 'confirm-modal') {
+                document.getElementById('confirm-modal').classList.remove('active');
+                idReservaPendente = null;
+            }
+        }
+
+        document.getElementById('btn-confirmar-cancelamento')?.addEventListener('click', function() {
+            if (idReservaPendente !== null) {
+                document.getElementById('confirm-modal').classList.remove('active'); // Fecha popup do aviso
+                
+                fetch(`http://localhost:8080/api/emprestimos/${idReservaPendente}`, {
+                    method: 'DELETE'
+                })
+                .then(resposta => {
+                    if (resposta.ok) {
+                        mostrarToast("Sua reserva foi cancelada com sucesso!");
+                        carregarReservas(); // Força recarregar a tabela ao vivo
+                    } else {
+                        mostrarToast("⚠️ Erro de API: Não foi possível cancelar.");
+                    }
+                })
+                .catch(erro => mostrarToast("⚠️ Erro Fatal: Falha de conexão na hora de cancelar."));
+            }
+        });
+
+        function fazerLogout() {
+            sessionStorage.removeItem("userLogado");
+            sessionStorage.removeItem("userPerfil");
+            window.location.reload(); // Recarrega, limpa tudo e a mágica desfaz...
+        }
+
+        // --- SISTEMA WOW ---
+
+        // 1. O Filtro Liso em Grade e no Carrossel
+        function filtrarLivrosGrid() {
+            const termo = document.getElementById('busca-livro').value.toLowerCase();
+            const cards = document.querySelectorAll('.acervo-item');
+            
+            cards.forEach(card => {
+                const titulo = card.querySelector('h3').textContent.toLowerCase();
+                const textoP = card.querySelector('p').textContent.toLowerCase();
+                
+                // Mágica do Grid do CSS: Ele reagrupa as caixinhas pra tapar os buracos
+                if (titulo.includes(termo) || textoP.includes(termo)) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+        
+        // 1.5 O Motor do Carrossel (Netflix Style)
+        function rolarCarrossel(distancia) {
+            const track = document.getElementById('container-livros');
+            track.scrollBy({ left: distancia, behavior: 'smooth' });
+        }
+        
+        function rolarCarrosselDepoimentos(distancia) {
+            const track = document.getElementById('container-depoimentos');
+            track.scrollBy({ left: distancia, behavior: 'smooth' });
+        }
+
+        // 1.6 Motor de Auto-Scroll dos Carrosseis
+        function iniciarAutoScroll(idContainer, intervaloMS) {
+            const track = document.getElementById(idContainer);
+            if (!track) return;
+            
+            let pausado = false;
+            // Pausa a rolagem caso o mouse passe por cima para o aluno ler em paz
+            track.addEventListener('mouseenter', () => pausado = true);
+            track.addEventListener('mouseleave', () => pausado = false);
+
+            setInterval(() => {
+                if (pausado) return;
+                
+                // Se o scroll bateu no final direito da parede (margem de erro de 10px px)
+                if (track.scrollLeft + track.clientWidth >= track.scrollWidth - 10) {
+                    track.scrollTo({ left: 0, behavior: 'smooth' }); // Rewind pro começo
+                } else {
+                    track.scrollBy({ left: 340, behavior: 'smooth' }); // Próxima página
+                }
+            }, intervaloMS);
+        }
+
+        // Da a partida nos motores quando a página estiver carregada
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => {
+                iniciarAutoScroll('container-livros', 1800);       // Rola destaques a cada 1.8s (Rápido)
+                iniciarAutoScroll('container-depoimentos', 1800);  // Rola avaliações a cada 1.8s (Mais rápido)
+            }, 1000); 
+        });
+
+
+        // 2. Os Toast Popups
+        function mostrarToast(mensagem) {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.innerText = mensagem;
+            
+            container.appendChild(toast);
+            
+            // Força reflow no css
+            setTimeout(() => toast.classList.add('show'), 50);
+            
+            // Destroi a si mesmo depois de 4 segundos
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 500); 
+            }, 4000);
+        }
+
+        // 3. Os contadores 
+        function animarContadores() {
+            const contadores = document.querySelectorAll('.stat-num');
+            const speed = 100; // Rapidez do Loop
+
+            contadores.forEach(contador => {
+                const updateCount = () => {
+                    const target = +contador.getAttribute('data-target');
+                    const count = +contador.innerText;
+
+                    const inc = target / speed;
+
+                    if (count < target) {
+                        contador.innerText = Math.ceil(count + inc);
+                        setTimeout(updateCount, 20);
+                    } else {
+                        contador.innerText = target + "+";
+                    }
+                };
+                updateCount();
+            });
+        }
+        
+        // Dispara ao carregar a página junto com o resto das mágicas do sistema
+        document.addEventListener('DOMContentLoaded', animarContadores);
+
+        // 4. Modal de Satélite de Localidade (Integração IFrame)
+        function abrirMapa(enderecoReal) {
+            const iframe = document.getElementById('google-map-iframe');
+            
+            // O Segredo: a conversão das string em formato URL Seguro %20
+            const urlCodificada = encodeURIComponent(enderecoReal);
+            const urlOficialGoogle = `https://www.google.com/maps?q=${urlCodificada}&output=embed`;
+            
+            // Coloca de forma dinâmica a src no navegador
+            iframe.src = urlOficialGoogle;
+            
+            // Trava e acende a Tela (Visor Preto)
+            document.getElementById('map-modal').classList.add('active');
+        }
+
+        function fecharMapa(evento) {
+            // Garante que só fecha se clicar FORA do Mapa ou no Botão Vermelho X explícito
+            if(evento.target.id === 'map-modal' || evento.target.classList.contains('close-map-btn')){
+                document.getElementById('map-modal').classList.remove('active');
+                
+                // Limpa o RAM do navegador pro Google parar de traquear no Fundo do TCC
+                document.getElementById('google-map-iframe').src = '';
+            }
+        }
+    </script>
 </body>
 </html>
