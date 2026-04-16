@@ -105,7 +105,7 @@ public class Aluno {
 	}
     public static void main(String[] args) {
 		Aluno p = new Aluno ();
-		p.setId(223);
+		p.setId(223L);
 		System.out.println(p.toString());
 	}
 }
