@@ -2,20 +2,22 @@ package br.com.belval.bibliotecadigital.controller;
 
 import br.com.belval.bibliotecadigital.model.Aluno;
 import br.com.belval.bibliotecadigital.repository.AlunoRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = {"http://localhost:5173", "http://localhost:3000", "http://localhost:5500", "http://127.0.0.1:5500", "null"})
 @RestController
 @RequestMapping("/api/alunos")
 public class AlunoController {
 
-    @Autowired
-    private AlunoRepository alunoRepository;
+    private final AlunoRepository alunoRepository;
+
+    public AlunoController(AlunoRepository alunoRepository) {
+        this.alunoRepository = alunoRepository;
+    }
 
     // Retorna todos os alunos cadastrados
     @GetMapping
