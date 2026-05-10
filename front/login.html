@@ -51,7 +51,7 @@
                 <h2 id="titulo-dinamico-login" data-i18n="login-titulo-aluno">Acesso Restrito - Aluno</h2>
                 <form id="form-login">
                     <div class="campo-agrupado">
-                        <label for="ra" data-i18n="login-label-ra">RA do Aluno</label>
+                        <label for="ra" id="label-login-ra" data-i18n="login-label-ra">RA do Aluno</label>
                         <input type="text" id="ra" placeholder="Digite seu RA" data-i18n="place-ra" required>
                     </div>
                     
@@ -110,6 +110,10 @@
             document.getElementById('login-erro').textContent = '';
             document.getElementById('cad-erro').textContent = '';
             
+            // Limpa os dados sempre que trocar de visão para privacidade
+            document.getElementById('form-login').reset();
+            document.getElementById('form-cadastro').reset();
+
             document.getElementById('bloco-escolha').style.display = 'none';
             document.getElementById('bloco-login').style.display = 'none';
             document.getElementById('bloco-cadastro').style.display = 'none';
@@ -126,10 +130,18 @@
         // Função do Botão Grande
         function escolherPortal(perfil) {
             intencaoLogin = perfil;
+            
+            // Limpa o formulário antes de entrar no novo portal
+            document.getElementById('form-login').reset();
+
             if (perfil === 'ADMIN') {
                 document.getElementById('titulo-dinamico-login').setAttribute('data-i18n', 'login-titulo-admin');
+                document.getElementById('label-login-ra').setAttribute('data-i18n', 'login-label-ra-admin');
+                document.getElementById('ra').setAttribute('data-i18n', 'place-ra-admin');
             } else {
                 document.getElementById('titulo-dinamico-login').setAttribute('data-i18n', 'login-titulo-aluno');
+                document.getElementById('label-login-ra').setAttribute('data-i18n', 'login-label-ra');
+                document.getElementById('ra').setAttribute('data-i18n', 'place-ra');
             }
             // Forçar o text content na hora
             const idiomaAtual = localStorage.getItem('idiomaSelecionado') || 'pt';
@@ -142,8 +154,8 @@
         document.getElementById('form-login').addEventListener('submit', function(e) {
             e.preventDefault();
             
-            const raAluno = document.getElementById('ra').value;
-            const senhaAluno = document.getElementById('senha').value;
+            const raAluno = document.getElementById('ra').value.trim();
+            const senhaAluno = document.getElementById('senha').value.trim();
             const erroMensagem = document.getElementById('login-erro');
 
             fetch("http://localhost:8080/api/alunos/login", {
@@ -157,19 +169,24 @@
             })
             .then(aluno => {
                 // Checa se quem clicou que é Admin realmente é admin no banco de dados!
-                if (intencaoLogin === 'ADMIN' && aluno.perfil !== 'ADMIN') {
+                const perfilReal = (aluno.perfil || "").trim();
+                
+                if (intencaoLogin === 'ADMIN' && perfilReal !== 'ADMIN') {
                     throw new Error("NegadoPerfil");
                 }
 
                 sessionStorage.setItem("userLogado", aluno.nome);
-                sessionStorage.setItem("userPerfil", aluno.perfil || "ALUNO"); 
+                sessionStorage.setItem("userPerfil", perfilReal); 
                 window.location.href = "index.html"; 
             })
-            .catch(erro => {
+            .catch(async (erro) => {
+                console.error("Erro no login:", erro);
                 if(erro.message === "NegadoPerfil") {
-                    erroMensagem.textContent = getTexto('login-erro-perfil');
+                    erroMensagem.textContent = getTexto('login-erro-perfil') || "Acesso negado: Perfil insuficiente.";
                 } else {
-                    erroMensagem.textContent = getTexto('login-erro-api');
+                    // Tenta ver se é erro de rede ou erro da API
+                    erroMensagem.textContent = getTexto('login-erro-api') || "Erro de conexão ou credenciais inválidas.";
+                    alert("Detalhes do erro: " + erro.message);
                 }
             });
         });
@@ -178,9 +195,9 @@
         document.getElementById('form-cadastro').addEventListener('submit', function(e) {
             e.preventDefault();
             
-            const nome = document.getElementById('cad-nome').value;
-            const ra = document.getElementById('cad-ra').value;
-            const senha = document.getElementById('cad-senha').value;
+            const nome = document.getElementById('cad-nome').value.trim();
+            const ra = document.getElementById('cad-ra').value.trim();
+            const senha = document.getElementById('cad-senha').value.trim();
             const perfil = "ALUNO"; // Cadastro público é sempre ALUNO
             const erroMensagem = document.getElementById('cad-erro');
 

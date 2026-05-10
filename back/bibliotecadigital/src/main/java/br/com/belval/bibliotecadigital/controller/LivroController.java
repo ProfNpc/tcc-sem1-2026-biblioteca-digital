@@ -25,14 +25,41 @@ public class LivroController {
         return livroRepository.findAll();
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<Livro> buscarPorId(@PathVariable Long id) {
+        return livroRepository.findById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
     // Salva um novo livro no banco de dados
     @PostMapping
     public ResponseEntity<Livro> adicionar(@RequestBody Livro livro) {
-        // Salva o livro e recebe a versão dele "com ID" que acabou de ser gerado pelo
-        // MySQL
         Livro livroSalvo = livroRepository.save(livro);
-
-        // Retorna o livro com o código 201 (Created)
         return ResponseEntity.status(HttpStatus.CREATED).body(livroSalvo);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Livro> atualizar(@PathVariable Long id, @RequestBody Livro livro) {
+        return livroRepository.findById(id).map(existente -> {
+            existente.setTitulo(livro.getTitulo());
+            existente.setAutor(livro.getAutor());
+            existente.setAnoPublicacao(livro.getAnoPublicacao());
+            existente.setIsbn(livro.getIsbn());
+            // Mantém a disponibilidade atual ou atualiza se vier no corpo
+            if (livro.getDisponivel() != null) existente.setDisponivel(livro.getDisponivel());
+            
+            Livro salvo = livroRepository.save(existente);
+            return ResponseEntity.ok(salvo);
+        }).orElse(ResponseEntity.notFound().build());
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> excluir(@PathVariable Long id) {
+        if (livroRepository.existsById(id)) {
+            livroRepository.deleteById(id);
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.notFound().build();
     }
 }

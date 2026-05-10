@@ -46,11 +46,11 @@ public class BibliotecadigitalApplication {
 			// 3. Cria alguns Livros se o banco estiver vazio
 			if (livroRepo.count() == 0) {
 				String[][] livrosIniciais = {
-					{"Dom Casmurro", "Machado de Assis", "1899", "978-85"},
-					{"O Pequeno Príncipe", "Antoine de Saint-Exupéry", "1943", "978-10"},
-					{"1984", "George Orwell", "1949", "978-20"},
-					{"O Cortiço", "Aluísio Azevedo", "1890", "978-30"},
-					{"Harry Potter e a Pedra Filosofal", "J.K. Rowling", "1997", "978-40"}
+						{ "Dom Casmurro", "Machado de Assis", "1899", "978-85" },
+						{ "O Pequeno Príncipe", "Antoine de Saint-Exupéry", "1943", "978-10" },
+						{ "1984", "George Orwell", "1949", "978-20" },
+						{ "O Cortiço", "Aluísio Azevedo", "1890", "978-30" },
+						{ "Harry Potter e a Pedra Filosofal", "J.K. Rowling", "1997", "978-40" }
 				};
 
 				for (String[] l : livrosIniciais) {
