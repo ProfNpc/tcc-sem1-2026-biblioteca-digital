@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BiblioTech — Biblioteca Digital ITB</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/i18n.js"></script>
+    <script src="js/data.js"></script>
+    <script src="js/ui.js"></script>
+</head>
+<body>
+
+<div id="toast-container"></div>
+
+<header>
+    <h1>📚 BiblioTech</h1>
+    <nav>
+        <a href="#" onclick="mostrarSeccao('CATALOGO')" id="link-home" data-i18n="nav-catalogo">Home</a>
+        <a href="#" onclick="mostrarSeccao('ACERVO')" id="link-acervo" style="display:none;" data-i18n="nav-acervo">Catálogo de Livros</a>
+        <a href="#" onclick="mostrarSeccao('RESERVAS')" id="link-reservas" style="display:none;" data-i18n="nav-reservas">Minhas Reservas</a>
+        <a href="#" onclick="mostrarSeccao('ADMIN_RESERVAS')" id="link-admin-reservas" style="display:none;" data-i18n="admin-res-titulo">Gestão de Reservas</a>
+        <span id="nav-login-area">
+            <a href="pages/login.html" data-i18n="nav-login">Login</a>
+        </span>
+        <div class="lang-toggles">
+            <button id="btn-lang-pt" class="lang-btn lang-ativo" onclick="mudarIdioma('pt')"><img src="https://flagcdn.com/w20/br.png" alt="BR"> PT</button>
+            <button id="btn-lang-en" class="lang-btn" onclick="mudarIdioma('en')"><img src="https://flagcdn.com/w20/us.png" alt="US"> EN</button>
+        </div>
+    </nav>
+</header>
+
+<main>
+
+<!-- CATÁLOGO (HOME) -->
+<section class="catalogo" id="secao-catalogo">
+    <h2 data-i18n="cat-titulo" style="text-align:center; font-size:2.2rem; color:#1e293b; margin-bottom:30px;">Livros em Destaque</h2>
+    <div class="carousel-wrapper">
+        <div class="cards carousel-track" id="container-livros"></div>
+    </div>
+    <div class="carousel-controls-bottom">
+        <button class="carousel-btn" onclick="rolarCarrossel(-340)">❮</button>
+        <button class="carousel-btn" onclick="rolarCarrossel(340)">❯</button>
+    </div>
+</section>
+
+<!-- ACERVO COMPLETO -->
+<section class="acervo" id="secao-acervo" style="display:none; padding:60px 40px; background:#ffffff;">
+    <h2 data-i18n="acervo-titulo" style="text-align:center; font-size:2.2rem; color:#1e293b; margin-bottom:20px;">Catálogo de Livros</h2>
+    <div class="search-container" style="max-width:800px;">
+        <input type="text" id="busca-livro" data-i18n="place-busca" placeholder="Pesquise por títulos, autores ou gênero..." autocomplete="off" oninput="filtrarLivrosGrid()">
+    </div>
+    <div class="acervo-grid" id="container-acervo-grid"></div>
+</section>
+
+<!-- COMO FUNCIONA -->
+<section class="como-funciona" id="como-funciona">
+    <h2 data-i18n="func-titulo">Como a Biblioteca Funciona?</h2>
+    <div class="como-grids">
+        <div class="passo-card">
+            <h3 data-i18n="func-passo1">🔍 1. Explore e Escolha</h3>
+            <p data-i18n="func-desc1">Navegue pelo nosso acervo inteligente e escolha o livro ideal para sua pesquisa.</p>
+        </div>
+        <div class="passo-card">
+            <h3 data-i18n="func-passo2">🔐 2. Autentique-se</h3>
+            <p data-i18n="func-desc2">Para segurança do acervo, as reservas exigem um Cadastro ou Login obrigatório.</p>
+        </div>
+        <div class="passo-card">
+            <h3 data-i18n="func-passo3">📅 3. Reserve e Retire</h3>
+            <p data-i18n="func-desc3">Com 1 clique o livro é seu! Dirija-se até a portaria do seu polo em até 24h para retirar.</p>
+        </div>
+    </div>
+</section>
+
+<!-- RESERVAS DO ALUNO -->
+<section class="sec-reservas" id="secao-reservas" style="display:none;">
+    <h2 data-i18n="res-titulo">Livros Reservados</h2>
+    <table class="tabela-glass">
+        <thead>
+            <tr>
+                <th data-i18n="tab-livro">Livro</th>
+                <th data-i18n="tab-data">Data da Reserva</th>
+                <th data-i18n="tab-limite">Entrega Limite</th>
+                <th data-i18n="tab-local">Retirada</th>
+                <th data-i18n="tab-status">Situação</th>
+                <th data-i18n="tab-acao">Ações</th>
+            </tr>
+        </thead>
+        <tbody id="corpo-tabela-reservas"></tbody>
+    </table>
+</section>
+
+<!-- ESTATÍSTICAS -->
+<section class="estatisticas">
+    <div class="stat-item">
+        <span class="stat-num" data-target="1500">0</span>
+        <span class="stat-label" data-i18n="stat-livros">Acervo Digital</span>
+    </div>
+    <div class="stat-item">
+        <span class="stat-num" data-target="839">0</span>
+        <span class="stat-label" data-i18n="stat-alunos">Alunos Ativos</span>
+    </div>
+    <div class="stat-item">
+        <span class="stat-num" data-target="5">0</span>
+        <span class="stat-label" data-i18n="stat-bib">Institutos</span>
+    </div>
+</section>
+
+<!-- DEPOIMENTOS -->
+<section class="depoimentos" id="depoimentos">
+    <h2 data-i18n="depo-titulo" style="text-align:center; font-size:2.2rem; color:#1e293b; margin-bottom:30px;">O que dizem sobre nós</h2>
+    <div class="carousel-wrapper">
+        <div class="cards carousel-track" id="container-depoimentos">
+            <div class="depoimento-card">
+                <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=150&q=80" alt="Prof Márcia" class="depo-foto">
+                <p data-i18n="depo-1-texto">"Recomendo fortemente a plataforma para os alunos."</p>
+                <h4 data-i18n="depo-1-autor">- Prof. Márcia C.</h4>
+            </div>
+            <div class="depoimento-card">
+                <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=150&q=80" alt="Lucas" class="depo-foto">
+                <p data-i18n="depo-2-texto">"O sistema de reservas agilizou minha pesquisa!"</p>
+                <h4 data-i18n="depo-2-autor">- Lucas T., Aluno Eng.</h4>
+            </div>
+            <div class="depoimento-card">
+                <img src="https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=150&q=80" alt="Ana" class="depo-foto">
+                <p data-i18n="depo-3-texto">"Muito fácil de navegar, sensacional!"</p>
+                <h4 data-i18n="depo-3-autor">- Ana S., Aluna Med.</h4>
+            </div>
+            <div class="depoimento-card">
+                <img src="https://images.unsplash.com/photo-1557862921-37829c790f19?auto=format&fit=crop&w=150&q=80" alt="Carlos" class="depo-foto">
+                <p data-i18n="depo-4-texto">"A integração com o catálogo é perfeita."</p>
+                <h4 data-i18n="depo-4-autor">- Carlos R., Aluno TI.</h4>
+            </div>
+            <div class="depoimento-card">
+                <img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=150&q=80" alt="Mariana" class="depo-foto">
+                <p data-i18n="depo-5-texto">"Interface absurdamente rápida!"</p>
+                <h4 data-i18n="depo-5-autor">- Mariana L., Profª História.</h4>
+            </div>
+            <div class="depoimento-card">
+                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150&q=80" alt="Felipe" class="depo-foto">
+                <p data-i18n="depo-6-texto">"Revolucionou a forma de estudar para o TCC."</p>
+                <h4 data-i18n="depo-6-autor">- Felipe M., Aluno Adm.</h4>
+            </div>
+        </div>
+    </div>
+    <div class="carousel-controls-bottom">
+        <button class="carousel-btn" onclick="rolarCarrosselDepoimentos(-340)">❮</button>
+        <button class="carousel-btn" onclick="rolarCarrosselDepoimentos(340)">❯</button>
+    </div>
+</section>
+
+<!-- POLOS PARCEIROS -->
+<section class="polos-parceiros" id="polos">
+    <h2 data-i18n="polos-titulo">Nossos Institutos Tecnológicos</h2>
+    <div class="polos-grid">
+        <div class="polo-card" onclick="abrirMapa('R. Interna Grupo Bandeirante, 138 - Jardim Belval, Barueri - SP')" style="cursor:pointer;" title="Ver no Google Maps">
+            <img src="img/itb-belval.png" alt="ITB Brasílio Flores">
+            <h3 data-i18n="polo-1">ITB Brasílio Flores de Azevedo</h3>
+            <p data-i18n="polo-1-desc" style="font-size:.9rem; color:#475569; padding:0 10px 15px;">Jardim Belval</p>
+        </div>
+        <div class="polo-card" onclick="abrirMapa('Estr. Velha de Itapevi, 2679 - Jardim Paulista, Barueri - SP')" style="cursor:pointer;" title="Ver no Google Maps">
+            <img src="img/itb-munir-jose.png" alt="ITB Prof. Munir José">
+            <h3 data-i18n="polo-2">ITB Prof. Munir José</h3>
+            <p data-i18n="polo-2-desc" style="font-size:.9rem; color:#475569; padding:0 10px 15px;">Jardim Paulista</p>
+        </div>
+        <div class="polo-card" onclick="abrirMapa('Rua do ITB, 238 - Vila Engenho Novo, Barueri - SP')" style="cursor:pointer;" title="Ver no Google Maps">
+            <img src="img/itb-engenho.png" alt="ITB Profª Maria Sylvia">
+            <h3 data-i18n="polo-3">ITB Profª Maria Sylvia</h3>
+            <p data-i18n="polo-3-desc" style="font-size:.9rem; color:#475569; padding:0 10px 15px;">Engenho Novo</p>
+        </div>
+        <div class="polo-card" onclick="abrirMapa('R. Abelardo Luz, 86 - Jardim Mutinga, Barueri - SP')" style="cursor:pointer;" title="Ver no Google Maps">
+            <img src="img/itb-hercules.png" alt="ITB Profº Hércules">
+            <h3 data-i18n="polo-4">ITB Profº Hércules Alves</h3>
+            <p data-i18n="polo-4-desc" style="font-size:.9rem; color:#475569; padding:0 10px 15px;">Jardim Mutinga</p>
+        </div>
+        <div class="polo-card" onclick="abrirMapa('R. Tomé de Souza, 259 - Parque Imperial, Barueri - SP')" style="cursor:pointer;" title="Ver no Google Maps">
+            <img src="img/itb-hercules.png" alt="ITB Profº Moacyr">
+            <h3 data-i18n="polo-5">ITB Profº Moacyr Domingos</h3>
+            <p data-i18n="polo-5-desc" style="font-size:.9rem; color:#475569; padding:0 10px 15px;">Parque Imperial</p>
+        </div>
+         <div class="polo-card" onclick="abrirMapa('Av. Andrômeda, 500 - Alphaville Empresarial, Barueri - SP')" style="cursor:pointer;" title="Ver no Google Maps">
+            <img src="img/itb-alphaville.jpg" alt="ITB Profº Maria Theodora">
+            <h3 data-i18n="polo-6">ITB Profº Maria Theodora</h3>
+            <p data-i18n="polo-6-desc" style="font-size:.9rem; color:#475569; padding:0 10px 15px;">Alphaville</p>
+        </div>
+    </div>
+</section>
+
+</main>
+
+<footer>
+    <div class="footer-links">
+        <a href="pages/sobre.html" data-i18n="foot-quem">Quem somos</a>
+        <a href="pages/contato.html" data-i18n="foot-fale">Fale conosco</a>
+        <a href="pages/faq.html" data-i18n="foot-faq">FAQ</a>
+        <a href="pages/creditos.html" data-i18n="foot-creditos">Créditos</a>
+        <a href="pages/politica.html" data-i18n="foot-politica">Política de privacidade</a>
+    </div>
+    <p data-i18n="footer-texto">© 2026 BiblioTech — Biblioteca Digital TCC. Todos os direitos reservados.</p>
+</footer>
+
+<!-- MODAL MAPA -->
+<div class="map-modal-overlay" id="map-modal" onclick="fecharMapa(event)">
+    <div class="map-modal-content">
+        <button class="close-map-btn" onclick="fecharMapa(event)">✕</button>
+        <iframe class="map-iframe" id="google-map-iframe" loading="lazy" allowfullscreen></iframe>
+    </div>
+</div>
+
+<!-- MODAL ESCOLHA DE POLO -->
+<div class="map-modal-overlay" id="polo-modal" onclick="fecharPoloModal(event)">
+    <div class="map-modal-content" style="padding:30px; text-align:center; max-width:450px; height:auto; background:rgba(255,255,255,0.97); backdrop-filter:blur(10px);">
+        <button class="close-map-btn" style="top:15px; right:15px; background:#ef4444; color:white;" onclick="fecharPoloModal(event)">✕</button>
+        <h3 style="margin-bottom:20px; color:#1e293b; font-size:1.5rem;">🏠 Onde você quer retirar?</h3>
+        <p style="color:#64748b; margin-bottom:20px;">Selecione a unidade ITB que você estuda.</p>
+        <select id="select-polo" onchange="atualizarInfoPolo()" style="width:100%; padding:12px; margin-bottom:20px; font-size:1rem; border-radius:8px; border:1px solid #cbd5e1; outline:none; background:#f8fafc; color:#334155; font-weight:500;">
+            <option value="ITB Brasílio Flores de Azevedo">ITB Brasílio Flores de Azevedo (Belval)</option>
+            <option value="ITB Prof. Munir José">ITB Prof. Munir José (Paulista)</option>
+            <option value="ITB Profª Maria Sylvia Chaluppe Mello">ITB Profª Maria Sylvia (Engenho Novo)</option>
+            <option value="ITB Profº Hércules Alves de Oliveira">ITB Profº Hércules Alves (Mutinga)</option>
+            <option value="ITB Profº Moacyr Domingos Sávio Veronezi">ITB Profº Moacyr Domingos (Pq Imperial)</option>
+            <option value="ITB Profº Maria Theodora">ITB Profº Maria Theodora (Alphaville)</option>
+        </select>
+        
+        <button id="btn-confirmar-polo" style="background:#2563eb; color:white; border:none; padding:14px 24px; font-size:1.1rem; font-weight:bold; border-radius:30px; cursor:pointer; width:100%; transition:.3s;" onmouseover="this.style.background='#1d4ed8'" onmouseout="this.style.background='#2563eb'">Confirmar Reserva</button>
+    </div>
+</div>
+
+<!-- PAINEL ADMIN -->
+<section class="sec-admin-reservas" id="secao-admin-reservas" style="display:none;">
+    <h2 data-i18n="admin-res-titulo">Gestão Global de Reservas</h2>
+    <table class="tabela-glass">
+        <thead>
+            <tr>
+                <th data-i18n="col-aluno">Estudante</th>
+                <th data-i18n="col-livro">Livro</th>
+                <th data-i18n="col-polo">Polo de Retirada</th>
+                <th data-i18n="tab-status">Situação</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody id="tabela-admin-reservas"></tbody>
+    </table>
+</section>
+
+<!-- MODAL CANCELAMENTO -->
+<div class="map-modal-overlay" id="confirm-modal" onclick="fecharConfirmModal(event)" style="z-index:10001;">
+    <div class="map-modal-content modal-danger">
+        <div class="modal-icon-header"><div class="icon-circle">⚠️</div></div>
+        <h3 style="margin-bottom:10px; color:#1e293b; font-size:1.6rem; padding:0 30px;" data-i18n="conf-titulo">Confirmar Cancelamento</h3>
+        <p id="confirm-msg-dinamica" style="color:#475569; margin-bottom:30px; line-height:1.6; font-size:1.1rem; padding:0 30px;"></p>
+        <div class="modal-footer-btns">
+            <button onclick="fecharConfirmModal(event, true)" class="btn-secundario" data-i18n="btn-voltar-simples">Voltar</button>
+            <button id="btn-confirmar-cancelamento" class="btn-perigo-gradiente">Sim, Cancelar</button>
+        </div>
+    </div>
+</div>
+
+<script>
+// ---- Bootstrapping da Página ----
+document.addEventListener('DOMContentLoaded', () => {
+    renderizarHeader();
+    carregarDestaques();
+    animarContadores();
+    const usuarioLogado = sessionStorage.getItem('userLogado');
+    const userPerfil    = sessionStorage.getItem('userPerfil');
+    if (usuarioLogado) {
+        carregarAcervoCompleto();
+        if (userPerfil === 'ADMIN') {
+            mostrarSeccao('ADMIN_RESERVAS');
+        } else {
+            mostrarSeccao('ACERVO');
+        }
+    }
+    setTimeout(() => {
+        iniciarAutoScroll('container-livros', 2000);
+        iniciarAutoScroll('container-depoimentos', 2200);
+    }, 1200);
+});
+
+// ---- Renderiza carrossel de destaques (mockado) ----
+function carregarDestaques() {
+    const container = document.getElementById('container-livros');
+    const destaques = DB.livros.slice(0, 8); // Primeiros 8 como destaques
+    container.innerHTML = destaques.map(l => buildCard(l, false)).join('');
+}
+
+// ---- Renderiza grade do acervo completo ----
+function carregarAcervoCompleto() {
+    const container = document.getElementById('container-acervo-grid');
+    container.innerHTML = DB.livros.map(l => buildCard(l, true)).join('');
+}
+
+function filtrarLivrosGrid() {
+    const termo = document.getElementById('busca-livro').value.toLowerCase();
+    document.querySelectorAll('.acervo-item').forEach(card => {
+        const txt = card.textContent.toLowerCase();
+        card.style.display = txt.includes(termo) ? 'flex' : 'none';
+    });
+}
+
+// ---- SPA: alternador de seções ----
+function mostrarSeccao(qual) {
+    const ids = ['secao-catalogo','secao-acervo','secao-reservas','secao-admin-reservas'];
+    const extras = ['.como-funciona','.estatisticas','.depoimentos','#polos'];
+    ids.forEach(id => { const el = document.getElementById(id); if(el) el.style.display = 'none'; });
+    extras.forEach(sel => { const el = document.querySelector(sel); if(el) el.style.display = 'none'; });
+
+    if (qual === 'RESERVAS') {
+        document.getElementById('secao-reservas').style.display = 'block';
+        carregarReservas();
+    } else if (qual === 'ADMIN_RESERVAS') {
+        document.getElementById('secao-admin-reservas').style.display = 'block';
+        carregarReservasAdmin();
+    } else if (qual === 'ACERVO') {
+        document.getElementById('secao-acervo').style.display = 'block';
+        document.querySelector('.estatisticas').style.display = 'flex';
+        carregarAcervoCompleto();
+    } else {
+        document.getElementById('secao-catalogo').style.display = 'block';
+        document.querySelector('.como-funciona').style.display = 'block';
+        document.querySelector('.estatisticas').style.display = 'flex';
+        document.querySelector('.depoimentos').style.display = 'block';
+        document.getElementById('polos').style.display = 'block';
+    }
+}
+
+// ---- Polo modal ----
+let livroPendenteReserva = '';
+
+function abrirModalPolo(titulo) {
+    if (!sessionStorage.getItem('userLogado')) {
+        window.location.href = 'pages/login.html';
+        return;
+    }
+    livroPendenteReserva = titulo;
+    document.getElementById('polo-modal').classList.add('active');
+    atualizarInfoPolo();
+}
+
+function fecharPoloModal(e) {
+    if (e.target.id === 'polo-modal' || e.target.classList.contains('close-map-btn'))
+        document.getElementById('polo-modal').classList.remove('active');
+}
+
+function atualizarInfoPolo() {
+    const sel = document.getElementById('select-polo').value;
+    const meta = POLOS_META[sel];
+    if (!meta) return;
+    const container = document.getElementById('polo-info-container');
+    container.style.opacity = 0.5;
+    setTimeout(() => {
+        document.getElementById('polo-img-preview').src = meta.img;
+        document.getElementById('polo-endereco-preview').innerHTML = `📍 ${meta.end}`;
+        container.style.opacity = 1;
+    }, 150);
+}
+
+document.getElementById('btn-confirmar-polo')?.addEventListener('click', () => {
+    const usuario = sessionStorage.getItem('userLogado');
+    const polo = document.getElementById('select-polo').value;
+    if (!usuario || !livroPendenteReserva) return;
+    document.getElementById('polo-modal').classList.remove('active');
+
+    const resultado = DB.criarReserva(usuario, livroPendenteReserva, polo);
+    if (resultado.erro === 'LIMITE_ATINGIDO') {
+        mostrarToast(getTexto('res-limite-erro'));
+    } else {
+        let msg = getTexto('msg-reserva')
+            .replace('{0}', usuario.split(' ')[0])
+            .replace('{1}', livroPendenteReserva)
+            .replace('{2}', polo);
+        mostrarToast(msg);
+        if (document.getElementById('secao-reservas').style.display === 'block') carregarReservas();
+    }
+});
+
+// ---- Reservas do aluno ----
+function carregarReservas() {
+    const usuario = sessionStorage.getItem('userLogado');
+    if (!usuario) return;
+    const lista = DB.getReservasPorAluno(usuario);
+    const tbody = document.getElementById('corpo-tabela-reservas');
+    if (lista.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; padding:20px;">${getTexto('res-vazio')}</td></tr>`;
+        return;
+    }
+    tbody.innerHTML = lista.map(emp => {
+        const vencido = new Date() > new Date(emp.dataDevolucao);
+        const cor = vencido ? 'background:#fee2e2; color:#b91c1c;' : 'background:#dcfce7; color:#15803d;';
+        const txt = vencido ? getTexto('status-vencido') : getTexto('status-apto');
+        const dr = emp.dataReserva.split('-').reverse().join('/');
+        const dd = emp.dataDevolucao.split('-').reverse().join('/');
+        const endPolo = POLOS_META[emp.poloRetirada]?.end || emp.poloRetirada;
+        return `<tr>
+            <td>${emp.tituloLivro}</td>
+            <td>${dr}</td>
+            <td>${dd}</td>
+            <td style="font-size:.9rem; color:#475569;">
+                ${emp.poloRetirada || 'Não informado'}
+                ${emp.poloRetirada ? `<br><button onclick="abrirMapa('${endPolo}')" style="background:none;border:none;color:#2563eb;cursor:pointer;font-size:.75rem;text-decoration:underline;padding:0;">${getTexto('btn-localizar')}</button>` : ''}
+            </td>
+            <td><span class="status-badge" style="${cor}">${txt}</span></td>
+            <td><button onclick="cancelarReserva(${emp.id}, '${emp.tituloLivro.replace(/'/g,"\\'")}') " style="background:#fee2e2; color:#ef4444; border:1px solid #fecaca; padding:6px 12px; border-radius:6px; cursor:pointer; font-weight:bold; transition:.3s;" onmouseover="this.style.background='#fecaca'" onmouseout="this.style.background='#fee2e2'">Cancelar</button></td>
+        </tr>`;
+    }).join('');
+}
+
+// ---- Admin ----
+function carregarReservasAdmin() {
+    const lista = DB.getTodasReservas().sort((a,b) => a.nomeAluno.localeCompare(b.nomeAluno));
+    const tbody = document.getElementById('tabela-admin-reservas');
+    if (lista.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding:20px;">Nenhuma reserva ativa no sistema.</td></tr>`;
+        return;
+    }
+    tbody.innerHTML = lista.map(emp => {
+        const retirado = emp.status === 'RETIRADO';
+        const badge = retirado
+            ? `<span class="status-badge-retirado">${getTexto('status-retirado')}</span>`
+            : `<span class="status-badge" style="background:#dcfce7;color:#15803d;">${getTexto('status-apto')}</span>`;
+        const btn = retirado
+            ? `<button class="btn-entregar-gradiente" disabled style="opacity:.5; cursor:not-allowed;">${getTexto('btn-entregar')}</button>`
+            : `<button class="btn-entregar-gradiente" onclick="confirmarEntrega(${emp.id},'${emp.tituloLivro.replace(/'/g,"\\'")}','${emp.nomeAluno.replace(/'/g,"\\'")}') ">${getTexto('btn-entregar')}</button>`;
+        return `<tr>
+            <td><strong>${emp.nomeAluno}</strong></td>
+            <td>${emp.tituloLivro}</td>
+            <td><small>📍 ${emp.poloRetirada || 'Não informado'}</small></td>
+            <td>${badge}</td>
+            <td>${btn}</td>
+        </tr>`;
+    }).join('');
+}
+
+function confirmarEntrega(id, titulo, aluno) {
+    if (DB.confirmarEntrega(id)) {
+        mostrarToast(`✅ O livro '${titulo}' foi entregue para ${aluno}.`);
+        carregarReservasAdmin();
+    }
+}
+
+// ---- Cancelamento ----
+let idReservaPendente = null;
+function cancelarReserva(id, titulo) {
+    idReservaPendente = id;
+    const msg = getTexto('conf-msg').replace('{0}', `<strong style="color:#1e3a8a;">${titulo}</strong>`);
+    document.getElementById('confirm-msg-dinamica').innerHTML = msg;
+    document.getElementById('confirm-modal').classList.add('active');
+}
+function fecharConfirmModal(e, forcar = false) {
+    if (forcar || e.target.id === 'confirm-modal') {
+        document.getElementById('confirm-modal').classList.remove('active');
+        idReservaPendente = null;
+    }
+}
+document.getElementById('btn-confirmar-cancelamento')?.addEventListener('click', () => {
+    if (idReservaPendente !== null) {
+        document.getElementById('confirm-modal').classList.remove('active');
+        DB.cancelarReserva(idReservaPendente);
+        mostrarToast('Sua reserva foi cancelada com sucesso!');
+        carregarReservas();
+    }
+});
+</script>
+</body>
+</html>

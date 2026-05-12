@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sobre Nós — BiblioTech</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <script src="../js/i18n.js"></script>
+</head>
+<body>
+<header>
+    <h1>📚 BiblioTech</h1>
+    <nav>
+        <a href="../index.html" data-i18n="nav-catalogo">Home</a>
+        <a href="login.html" data-i18n="nav-login">Login</a>
+        <div class="lang-toggles">
+            <button id="btn-lang-pt" class="lang-btn lang-ativo" onclick="mudarIdioma('pt')"><img src="https://flagcdn.com/w20/br.png" alt="BR"> PT</button>
+            <button id="btn-lang-en" class="lang-btn" onclick="mudarIdioma('en')"><img src="https://flagcdn.com/w20/us.png" alt="US"> EN</button>
+        </div>
+    </nav>
+</header>
+
+<div class="page-hero">
+    <h1 data-i18n="sobre-titulo">Sobre a BiblioTech</h1>
+    <p data-i18n="sobre-subtitulo">Levando o conhecimento a todos os alunos do ITB</p>
+</div>
+
+<div class="content-section">
+    <div class="info-grid">
+        <div class="info-card">
+            <div class="icon">🎯</div>
+            <h3 data-i18n="sobre-missao-titulo">Nossa Missão</h3>
+            <p data-i18n="sobre-missao-desc">A BiblioTech foi desenvolvida como projeto de TCC para modernizar o acesso ao acervo bibliográfico dos Institutos Tecnológicos de Barueri (ITB). Nossa plataforma conecta alunos ao vasto catálogo de livros das cinco unidades, com reservas online 100% integradas.</p>
+        </div>
+        <div class="info-card">
+            <div class="icon">🔭</div>
+            <h3 data-i18n="sobre-visao-titulo">Nossa Visão</h3>
+            <p data-i18n="sobre-visao-desc">Ser a principal ferramenta digital de gestão de biblioteca das escolas técnicas municipais, garantindo acesso democrático ao conhecimento para todos os estudantes da rede ITB.</p>
+        </div>
+    </div>
+</div>
+
+<div style="background:#f8fafc; padding:60px 5%;">
+    <div style="max-width:1200px; margin:0 auto;">
+        <h2 style="color:#1e3a8a; font-size:2rem; margin-bottom:30px;" data-i18n="sobre-valores-titulo">Nossos Valores</h2>
+        <ul class="valores-lista">
+            <li>📖 Acesso democrático ao conhecimento</li>
+            <li>🔒 Segurança e confiabilidade</li>
+            <li>⚡ Agilidade e praticidade</li>
+            <li>🌱 Educação como transformação social</li>
+            <li>🤝 Parceria com a comunidade escolar</li>
+            <li>💡 Inovação tecnológica a serviço da educação</li>
+        </ul>
+    </div>
+</div>
+
+<div class="content-section">
+    <h2 data-i18n="sobre-tech-titulo">Tecnologias Utilizadas</h2>
+    <p style="color:#475569; margin-bottom:20px;">O projeto foi desenvolvido com as seguintes tecnologias:</p>
+    <div class="tech-grid">
+        <span class="tech-badge">HTML5</span>
+        <span class="tech-badge">CSS3</span>
+        <span class="tech-badge">JavaScript ES6+</span>
+        <span class="tech-badge">Java 17</span>
+        <span class="tech-badge">Spring Boot</span>
+        <span class="tech-badge">MySQL</span>
+        <span class="tech-badge">REST API</span>
+        <span class="tech-badge">Google Maps API</span>
+        <span class="tech-badge">i18n (PT/EN)</span>
+    </div>
+
+    <div style="margin-top:60px;">
+        <h2 style="color:#1e3a8a; font-size:1.8rem; margin-bottom:25px;">🏫 Sobre os Institutos ITB</h2>
+        <p>O <strong>ITB (Instituto Tecnológico de Barueri)</strong> é uma rede de escolas técnicas municipais da cidade de Barueri — SP. A rede conta com cinco unidades espalhadas por diferentes bairros, atendendo milhares de alunos com cursos técnicos de qualidade.</p>
+        <p>A BiblioTech nasce da necessidade de integrar o acervo bibliográfico dessas cinco unidades em uma única plataforma digital, eliminando a burocracia dos processos manuais e facilitando o acesso dos alunos aos livros de que precisam para seus estudos.</p>
+    </div>
+</div>
+
+<div style="background:#0f172a; color:white; padding:60px 5%; text-align:center;">
+    <h2 style="font-size:2rem; margin-bottom:15px; color:#3b82f6;">Um projeto de TCC com impacto real</h2>
+    <p style="color:#94a3b8; font-size:1.1rem; max-width:700px; margin:0 auto 30px;">Desenvolvido por alunos do ITB, para alunos do ITB. Cada funcionalidade foi pensada para resolver problemas reais da nossa comunidade escolar.</p>
+    <a href="../index.html" style="display:inline-block; background:#2563eb; color:white; padding:14px 32px; border-radius:30px; text-decoration:none; font-weight:700; font-size:1.1rem; transition:.3s;" onmouseover="this.style.background='#1d4ed8'" onmouseout="this.style.background='#2563eb'">Explorar a Plataforma →</a>
+</div>
+
+<footer>
+    <div class="footer-links">
+        <a href="sobre.html" data-i18n="foot-quem">Quem somos</a>
+        <a href="contato.html" data-i18n="foot-fale">Fale conosco</a>
+        <a href="faq.html" data-i18n="foot-faq">FAQ</a>
+        <a href="creditos.html" data-i18n="foot-creditos">Créditos</a>
+        <a href="politica.html" data-i18n="foot-politica">Política de privacidade</a>
+    </div>
+    <p data-i18n="footer-texto">© 2026 BiblioTech — Biblioteca Digital TCC. Todos os direitos reservados.</p>
+</footer>
+</body>
+</html>

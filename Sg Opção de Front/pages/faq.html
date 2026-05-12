@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAQ — BiblioTech</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <script src="../js/i18n.js"></script>
+</head>
+<body>
+<header>
+    <h1>📚 BiblioTech</h1>
+    <nav>
+        <a href="../index.html" data-i18n="nav-catalogo">Home</a>
+        <a href="login.html" data-i18n="nav-login">Login</a>
+        <div class="lang-toggles">
+            <button id="btn-lang-pt" class="lang-btn lang-ativo" onclick="mudarIdioma('pt')"><img src="https://flagcdn.com/w20/br.png" alt="BR"> PT</button>
+            <button id="btn-lang-en" class="lang-btn" onclick="mudarIdioma('en')"><img src="https://flagcdn.com/w20/us.png" alt="US"> EN</button>
+        </div>
+    </nav>
+</header>
+
+<div class="page-hero">
+    <h1 data-i18n="faq-titulo">Perguntas Frequentes</h1>
+    <p data-i18n="faq-subtitulo">Tire suas dúvidas sobre o sistema BiblioTech</p>
+</div>
+
+<div class="faq-section">
+
+    <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)">
+            Como faço para reservar um livro?
+            <span class="arrow">▼</span>
+        </button>
+        <div class="faq-answer">
+            Para reservar um livro, você precisa estar logado no sistema. Navegue até o Catálogo de Livros, encontre o título desejado e clique em "Fazer Reserva". Uma janela será aberta para você escolher em qual polo ITB deseja retirar o livro. Confirme a escolha e pronto — sua reserva está feita!
+        </div>
+    </div>
+
+    <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)">
+            Quantos livros posso reservar ao mesmo tempo?
+            <span class="arrow">▼</span>
+        </button>
+        <div class="faq-answer">
+            Cada aluno pode ter até <strong>5 reservas ativas</strong> simultaneamente. Ao cancelar uma reserva ou devolver um livro, uma nova vaga é liberada automaticamente.
+        </div>
+    </div>
+
+    <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)">
+            Qual é o prazo para retirar o livro após a reserva?
+            <span class="arrow">▼</span>
+        </button>
+        <div class="faq-answer">
+            Após a confirmação da reserva, você tem <strong>48 horas</strong> para comparecer ao polo escolhido e retirar o livro. Após esse prazo, a reserva pode ser cancelada para liberar o exemplar para outros alunos.
+        </div>
+    </div>
+
+    <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)">
+            Por quanto tempo posso ficar com o livro?
+            <span class="arrow">▼</span>
+        </button>
+        <div class="faq-answer">
+            O prazo padrão de empréstimo é de <strong>14 dias</strong> (duas semanas) a partir da data de reserva. Após esse período, o status da reserva muda para "Vencido" e você deve devolver o exemplar ao polo para evitar penalidades.
+        </div>
+    </div>
+
+    <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)">
+            Como faço login no sistema?
+            <span class="arrow">▼</span>
+        </button>
+        <div class="faq-answer">
+            Clique em "Login" no menu superior e escolha seu perfil (Aluno ou Administrador). Em seguida, insira seu <strong>RA (Registro de Aluno)</strong> e sua senha. Se ainda não tiver cadastro, clique em "Cadastre-se" para criar sua conta gratuitamente.
+        </div>
+    </div>
+
+    <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)">
+            Posso cancelar uma reserva?
+            <span class="arrow">▼</span>
+        </button>
+        <div class="faq-answer">
+            Sim! Acesse a seção "Minhas Reservas" no menu e clique no botão <strong>Cancelar</strong> ao lado da reserva que deseja remover. Uma confirmação será exibida antes de concluir o cancelamento.
+        </div>
+    </div>
+
+    <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)">
+            Posso retirar o livro em qualquer polo?
+            <span class="arrow">▼</span>
+        </button>
+        <div class="faq-answer">
+            No momento da reserva, você escolhe o polo preferido para retirada. A retirada deve ser feita <strong>exclusivamente no polo selecionado</strong>. A BiblioTech conta com 5 polos em Barueri: Jardim Belval, Jardim Paulista, Engenho Novo, Jardim Mutinga e Parque Imperial.
+        </div>
+    </div>
+
+    <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)">
+            O sistema está disponível fora do horário escolar?
+            <span class="arrow">▼</span>
+        </button>
+        <div class="faq-answer">
+            Sim! O sistema da BiblioTech fica disponível <strong>24 horas por dia, 7 dias por semana</strong>. Você pode fazer reservas a qualquer hora. A retirada física do livro, no entanto, está sujeita ao horário de funcionamento de cada polo ITB.
+        </div>
+    </div>
+
+    <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)">
+            O sistema funciona em português e inglês?
+            <span class="arrow">▼</span>
+        </button>
+        <div class="faq-answer">
+            Sim! A BiblioTech oferece suporte a dois idiomas: <strong>Português (PT-BR)</strong> e <strong>Inglês (EN)</strong>. Basta clicar nos botões de idioma no canto superior direito do menu para alternar entre eles. A preferência é salva automaticamente no seu navegador.
+        </div>
+    </div>
+
+    <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)">
+            Tenho dificuldades técnicas, com quem falo?
+            <span class="arrow">▼</span>
+        </button>
+        <div class="faq-answer">
+            Entre em contato através da nossa página de <a href="contato.html" style="color:#2563eb; font-weight:700;">Fale Conosco</a>. Nossa equipe responde em até 2 dias úteis. Você também pode procurar a secretaria de qualquer polo ITB para suporte presencial.
+        </div>
+    </div>
+
+</div>
+
+<div style="background:#eff6ff; padding:60px 5%; text-align:center;">
+    <h3 style="color:#1e3a8a; font-size:1.5rem; margin-bottom:15px;">Ainda tem dúvidas?</h3>
+    <p style="color:#475569; margin-bottom:25px;">Nossa equipe está pronta para ajudar você!</p>
+    <a href="contato.html" style="display:inline-block; background:#2563eb; color:white; padding:14px 32px; border-radius:30px; text-decoration:none; font-weight:700; transition:.3s;" onmouseover="this.style.background='#1d4ed8'" onmouseout="this.style.background='#2563eb'">Fale Conosco →</a>
+</div>
+
+<footer>
+    <div class="footer-links">
+        <a href="sobre.html" data-i18n="foot-quem">Quem somos</a>
+        <a href="contato.html" data-i18n="foot-fale">Fale conosco</a>
+        <a href="faq.html" data-i18n="foot-faq">FAQ</a>
+        <a href="creditos.html" data-i18n="foot-creditos">Créditos</a>
+        <a href="politica.html" data-i18n="foot-politica">Política de privacidade</a>
+    </div>
+    <p data-i18n="footer-texto">© 2026 BiblioTech — Biblioteca Digital TCC. Todos os direitos reservados.</p>
+</footer>
+
+<script>
+function toggleFaq(btn) {
+    const answer = btn.nextElementSibling;
+    const isOpen = answer.classList.contains('open');
+    // Fecha todos
+    document.querySelectorAll('.faq-answer').forEach(a => a.classList.remove('open'));
+    document.querySelectorAll('.faq-question').forEach(b => b.classList.remove('open'));
+    // Abre o clicado (se estava fechado)
+    if (!isOpen) {
+        answer.classList.add('open');
+        btn.classList.add('open');
+    }
+}
+</script>
+</body>
+</html>
