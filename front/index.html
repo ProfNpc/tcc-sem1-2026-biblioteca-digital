@@ -252,6 +252,15 @@
                         style="font-size: 0.9rem; color: #475569; padding: 0 10px; padding-bottom: 15px;">Parque
                         Imperial</p>
                 </div>
+                <div class="polo-card"
+                    onclick="abrirMapa('Av. Andrômeda, 500 - Alphaville Empresarial, Barueri - SP, 06473-005')"
+                    style="cursor: pointer;" title="Ver trajeto no Google Maps!">
+                    <img src="img/itb-alphaville.jpg"
+                        alt="ITB Profº Maria Theodora">
+                    <h3 data-i18n="polo-6">ITB Profº Maria Theodora</h3>
+                    <p data-i18n="polo-6-desc"
+                        style="font-size: 0.9rem; color: #475569; padding: 0 10px; padding-bottom: 15px;">Alphaville</p>
+                </div>
             </div>
         </section>
 
@@ -283,8 +292,7 @@
             <button class="close-map-btn" style="top: 15px; right: 15px; background: #ef4444; color: white;"
                 onclick="fecharPoloModal(event)">X</button>
             <h3 style="margin-bottom: 20px; color: #1e293b; font-size: 1.5rem;">🏠 Onde você quer retirar?</h3>
-            <p style="color: #64748b; margin-bottom: 20px;">Selecione abaixo a unidade do ITB mais próxima de você para
-                buscar o livro amanhã.</p>
+            <p style="color: #64748b; margin-bottom: 20px;">Selecione abaixo a unidade do ITB no qual você estuda.</p>
 
             <select id="select-polo" onchange="atualizarInfoPolo()"
                 style="width: 100%; padding: 12px; margin-bottom: 20px; font-size: 1rem; border-radius: 8px; border: 1px solid #cbd5e1; outline: none; background: #f8fafc; color: #334155; font-weight: 500;">
@@ -294,6 +302,7 @@
                 <option value="ITB Profº Hércules Alves de Oliveira">ITB Profº Hércules Alves (Mutinga)</option>
                 <option value="ITB Profº Moacyr Domingos Sávio Veronezi">ITB Profº Moacyr Domingos (Pq Imperial)
                 </option>
+                <option value="ITB Profº Maria Theodora">ITB Profº Maria Theodora (Alphaville)</option>
             </select>
 
             <div id="polo-info-container"
