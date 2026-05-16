@@ -16,6 +16,7 @@ const traducoes = {
         "footer-texto": "© 2026 Biblioteca Digital TCC. Todos os direitos reservados.",
         "login-titulo": "Entrar no Sistema",
         "login-label-ra": "RA do Aluno",
+        "login-label-ra-admin": "Login Administrativo",
         "login-label-senha": "Senha",
         "login-btn": "Acessar",
         "login-erro-api": "RA ou Senha incorretos!",
@@ -102,6 +103,7 @@ const traducoes = {
         // Placeholder strings
         "place-nome": "Ex: João da Silva",
         "place-ra": "Digite seu RA ou Matrícula",
+        "place-ra-admin": "Digite seu login de administrador",
         "place-senha": "Sua senha secreta",
         "place-busca": "Pesquise por títulos, autores ou assunto...",
         // Admin
@@ -110,7 +112,23 @@ const traducoes = {
         "col-aluno": "Estudante",
         "col-livro": "Livro",
         "col-polo": "Polo de Retirada",
-        "status-retirado": "🔵 Retirado"
+        "status-retirado": "🔵 Retirado",
+        "btn-devolver": "Confirmar Devolução",
+        "nav-admin-livros": "Gerir Acervo",
+        "admin-livros-titulo": "Controle de Acervo Físico",
+        "btn-novo-livro": "+ Novo Livro",
+        "btn-salvar-livro": "Salvar Livro",
+        "label-titulo-livro": "Título da Obra",
+        "label-autor-livro": "Autor",
+        "label-ano-livro": "Ano de Lançamento",
+        "label-isbn-livro": "Código ISBN",
+        "dash-livros": "Total no Acervo",
+        "dash-disp": "Disponíveis Agora",
+        "dash-alunos": "Alunos na Base",
+        "dash-emprestimos": "Reservas Ativas",
+        "msg-livro-salvo": "Livro cadastrado com sucesso!",
+        "msg-livro-deletado": "Livro removido do catálogo.",
+        "msg-devolucao": "Devolução confirmada! O livro {0} está disponível novamente."
     },
     en: {
         "nav-catalogo": "Home",
@@ -129,6 +147,7 @@ const traducoes = {
         "footer-texto": "© 2026 Digital Library Thesis. All rights reserved.",
         "login-titulo": "System Login",
         "login-label-ra": "Student ID (RA)",
+        "login-label-ra-admin": "Admin Login",
         "login-label-senha": "Password",
         "login-btn": "Access",
         "login-erro-api": "Incorrect Student ID or Password!",
@@ -215,6 +234,7 @@ const traducoes = {
         // Placeholder strings
         "place-nome": "e.g. John Doe",
         "place-ra": "Enter your ID",
+        "place-ra-admin": "Enter your admin login",
         "place-senha": "Your secret password",
         "place-busca": "Search for titles, authors or subjects...",
         // Admin
@@ -223,7 +243,23 @@ const traducoes = {
         "col-aluno": "Student",
         "col-livro": "Book",
         "col-polo": "Pickup Point",
-        "status-retirado": "🔵 Collected"
+        "status-retirado": "🔵 Collected",
+        "btn-devolver": "Confirm Return",
+        "nav-admin-livros": "Manage Books",
+        "admin-livros-titulo": "Physical Catalog Control",
+        "btn-novo-livro": "+ New Book",
+        "btn-salvar-livro": "Save Book",
+        "label-titulo-livro": "Book Title",
+        "label-autor-livro": "Author",
+        "label-ano-livro": "Release Year",
+        "label-isbn-livro": "ISBN Code",
+        "dash-livros": "Total Collection",
+        "dash-disp": "Available Now",
+        "dash-alunos": "Students in Base",
+        "dash-emprestimos": "Active Loans",
+        "msg-livro-salvo": "Book successfully registered!",
+        "msg-livro-deletado": "Book removed from catalog.",
+        "msg-devolucao": "Return confirmed! Book {0} is available again."
     }
 };
 

@@ -31,3 +31,11 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Projeto TCC ###
+back/bibliotecadigital/data/
+back/bibliotecadigital/target/
+bin/
+/out/
+*.log
+.antigravity/
