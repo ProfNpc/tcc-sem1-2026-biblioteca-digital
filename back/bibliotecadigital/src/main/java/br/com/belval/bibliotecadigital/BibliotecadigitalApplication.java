@@ -1,15 +1,13 @@
 package br.com.belval.bibliotecadigital;
 
-<<<<<<< HEAD
-=======
 import br.com.belval.bibliotecadigital.model.Aluno;
 import br.com.belval.bibliotecadigital.model.Livro;
 import br.com.belval.bibliotecadigital.repository.AlunoRepository;
 import br.com.belval.bibliotecadigital.repository.LivroRepository;
 import org.springframework.boot.CommandLineRunner;
->>>>>>> a729e47916c9bac39c6da605bf251f03d476192b
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication
 public class BibliotecadigitalApplication {
@@ -18,8 +16,7 @@ public class BibliotecadigitalApplication {
 		SpringApplication.run(BibliotecadigitalApplication.class, args);
 	}
 
-<<<<<<< HEAD
-=======
+	// Popula o banco automaticamente quando o servidor inicia (funciona com H2)
 	@Bean
 	public CommandLineRunner seedDados(AlunoRepository alunoRepo, LivroRepository livroRepo) {
 		return args -> {
@@ -50,11 +47,14 @@ public class BibliotecadigitalApplication {
 			// 3. Cria alguns Livros se o banco estiver vazio
 			if (livroRepo.count() == 0) {
 				String[][] livrosIniciais = {
-						{ "Dom Casmurro", "Machado de Assis", "1899", "978-85" },
-						{ "O Pequeno Príncipe", "Antoine de Saint-Exupéry", "1943", "978-10" },
-						{ "1984", "George Orwell", "1949", "978-20" },
-						{ "O Cortiço", "Aluísio Azevedo", "1890", "978-30" },
-						{ "Harry Potter e a Pedra Filosofal", "J.K. Rowling", "1997", "978-40" }
+						{ "Dom Casmurro", "Machado de Assis", "1899", "978-85-00-01" },
+						{ "O Pequeno Príncipe", "Antoine de Saint-Exupéry", "1943", "978-85-00-02" },
+						{ "1984", "George Orwell", "1949", "978-85-00-03" },
+						{ "O Cortiço", "Aluísio Azevedo", "1890", "978-85-00-04" },
+						{ "Harry Potter e a Pedra Filosofal", "J.K. Rowling", "1997", "978-85-00-05" },
+						{ "A Moreninha", "Joaquim Manuel de Macedo", "1844", "978-85-00-06" },
+						{ "Capitães da Areia", "Jorge Amado", "1937", "978-85-00-07" },
+						{ "O Alquimista", "Paulo Coelho", "1988", "978-85-00-08" }
 				};
 
 				for (String[] l : livrosIniciais) {
@@ -66,9 +66,8 @@ public class BibliotecadigitalApplication {
 					novo.setDisponivel(true);
 					livroRepo.save(novo);
 				}
-				System.out.println(">>> [SEED] 5 Livros iniciais cadastrados com sucesso!");
+				System.out.println(">>> [SEED] 8 Livros iniciais cadastrados com sucesso!");
 			}
 		};
 	}
->>>>>>> a729e47916c9bac39c6da605bf251f03d476192b
 }
