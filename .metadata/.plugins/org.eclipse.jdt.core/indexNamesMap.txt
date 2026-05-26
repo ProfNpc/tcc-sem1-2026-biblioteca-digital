@@ -1,3 +1,0 @@
-INDEX VERSION 1.134
-file:/Z:/Alterações%20TCC%20-%20Casa/.metadata/.plugins/org.eclipse.jdt.core/1865797976.index
-meta_index

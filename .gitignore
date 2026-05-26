@@ -39,3 +39,4 @@ bin/
 /out/
 *.log
 .antigravity/
+/.metadata/
