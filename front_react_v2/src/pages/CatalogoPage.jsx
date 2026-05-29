@@ -40,7 +40,7 @@ const POLOS = [
     img: poloMoacyr,
   },
   {
-    nome: 'ITB Profª Maria Theodora Guilherme de Moraes Leme',
+    nome: 'ITB Profª Maria Theodora Pedreira de Freitas',
     bairro: 'Alphaville',
     endereco: 'Av. Andrômeda, 500 - Alphaville Empresarial, Barueri - SP, 06473-005',
     img: poloAlphaville,
