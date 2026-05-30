@@ -1,0 +1,6 @@
+INDEX VERSION 1.134+Z:\lip1\workspace\tcc-sem1-2026-biblioteca-digital\back\bibliotecadigital\.metadata\.plugins\org.eclipse.jdt.core
+4074466843.index
+1865797976.index
+249265595.index
+3973600853.index
+2755025474.index

@@ -1,0 +1,3 @@
+INDEX VERSION 1.134
+file:/Z:/lip1/workspace/tcc-sem1-2026-biblioteca-digital/back/bibliotecadigital/.metadata/.plugins/org.eclipse.jdt.core/1865797976.index
+meta_index
