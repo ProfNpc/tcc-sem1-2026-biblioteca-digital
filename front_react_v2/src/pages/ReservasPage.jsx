@@ -90,7 +90,7 @@ export default function ReservasPage({ usuario }) {
             </p>
             <div className="modal-footer" style={{ justifyContent: 'center' }}>
               <button className="btn-cancelar" onClick={() => setConfirmId(null)}>Voltar</button>
-              <button className="btn-primario" style={{ background: 'linear-gradient(135deg, #ef4444, #dc2626)' }} onClick={cancelar}>
+              <button className="btn-primario" style={{ background: 'linear-gradient(135deg, #ef4444, hsla(0, 72%, 51%, 1.00))' }} onClick={cancelar}>
                 Sim, Cancelar
               </button>
             </div>

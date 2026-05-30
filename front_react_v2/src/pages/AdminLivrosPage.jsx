@@ -11,46 +11,33 @@ export default function AdminLivrosPage() {
   const [form, setForm] = useState(VAZIO);
   const [editId, setEditId] = useState(null);
   const [salvando, setSalvando] = useState(false);
+  const [confirmId, setConfirmId] = useState(null);
+  const [confirmTitulo, setConfirmTitulo] = useState('');
   const toast = useToast();
 
-  function carregar() {
-    api.getLivros().then(setLivros);
-  }
-
+  function carregar() { api.getLivros().then(setLivros); }
   useEffect(() => { carregar(); }, []);
 
-  function abrirNovo() {
-    setForm(VAZIO); setEditId(null); setModal(true);
-  }
+  function abrirNovo() { setForm(VAZIO); setEditId(null); setModal(true); }
 
   function abrirEditar(livro) {
     setForm({ titulo: livro.titulo, autor: livro.autor, anoPublicacao: livro.anoPublicacao, isbn: livro.isbn || '' });
-    setEditId(livro.id);
-    setModal(true);
+    setEditId(livro.id); setModal(true);
   }
 
   async function salvar(e) {
-    e.preventDefault();
-    setSalvando(true);
+    e.preventDefault(); setSalvando(true);
     try {
-      if (editId) {
-        await api.editarLivro(editId, form);
-        toast('✅ Livro atualizado com sucesso!');
-      } else {
-        await api.criarLivro(form);
-        toast('✅ Livro cadastrado com sucesso!');
-      }
-      setModal(false);
-      carregar();
-    } catch {
-      toast('⚠️ Erro ao salvar livro.');
-    }
+      if (editId) { await api.editarLivro(editId, form); toast('✅ Livro atualizado com sucesso!'); }
+      else { await api.criarLivro(form); toast('✅ Livro cadastrado com sucesso!'); }
+      setModal(false); carregar();
+    } catch { toast('⚠️ Erro ao salvar livro.'); }
     setSalvando(false);
   }
 
-  async function deletar(id, titulo) {
-    if (!confirm(`Excluir "${titulo}"?`)) return;
-    const resp = await api.deletarLivro(id);
+  async function confirmarDeletar() {
+    const resp = await api.deletarLivro(confirmId);
+    setConfirmId(null);
     if (resp.ok) { toast('🗑️ Livro excluído.'); carregar(); }
     else toast('⚠️ Erro ao excluir.');
   }
@@ -72,13 +59,7 @@ export default function AdminLivrosPage() {
       <table>
         <thead>
           <tr>
-            <th>ID</th>
-            <th>Título</th>
-            <th>Autor</th>
-            <th>Ano</th>
-            <th>ISBN</th>
-            <th>Status</th>
-            <th>Ações</th>
+            <th>ID</th><th>Título</th><th>Autor</th><th>Ano</th><th>ISBN</th><th>Status</th><th>Ações</th>
           </tr>
         </thead>
         <tbody>
@@ -99,7 +80,7 @@ export default function AdminLivrosPage() {
               </td>
               <td>
                 <button className="btn-icone btn-editar" onClick={() => abrirEditar(l)}>✏️</button>
-                <button className="btn-icone btn-deletar" onClick={() => deletar(l.id, l.titulo)}>🗑️</button>
+                <button className="btn-icone btn-deletar" onClick={() => { setConfirmId(l.id); setConfirmTitulo(l.titulo); }}>🗑️</button>
               </td>
             </tr>
           ))}
@@ -137,6 +118,25 @@ export default function AdminLivrosPage() {
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* MODAL DE CONFIRMAÇÃO DE EXCLUSÃO */}
+      {confirmId && (
+        <div className="modal-confirm-overlay" onClick={e => e.target === e.currentTarget && setConfirmId(null)}>
+          <div className="modal-confirm-box">
+            <div className="modal-confirm-icon">
+              <div className="modal-confirm-icon-circle">⚠️</div>
+            </div>
+            <div className="modal-confirm-body">
+              <h3>Confirmar Exclusão</h3>
+              <p>Deseja excluir o livro <strong>{confirmTitulo}</strong>?</p>
+            </div>
+            <div className="modal-confirm-footer">
+              <button className="btn-confirm-voltar" onClick={() => setConfirmId(null)}>Voltar</button>
+              <button className="btn-confirm-excluir" onClick={confirmarDeletar}>Sim, Excluir</button>
+            </div>
           </div>
         </div>
       )}
