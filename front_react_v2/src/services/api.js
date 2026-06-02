@@ -1,4 +1,5 @@
 const BASE = 'http://localhost:8080/api';
+export const IMG_BASE = 'http://localhost:8080/capas';
 
 export const api = {
   // LIVROS
@@ -6,6 +7,11 @@ export const api = {
   criarLivro: (data) => fetch(`${BASE}/livros`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) }).then(r => r.json()),
   editarLivro: (id, data) => fetch(`${BASE}/livros/${id}`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) }).then(r => r.json()),
   deletarLivro: (id) => fetch(`${BASE}/livros/${id}`, { method: 'DELETE' }),
+  uploadImagem: (id, arquivo) => {
+    const form = new FormData();
+    form.append('arquivo', arquivo);
+    return fetch(`${BASE}/livros/${id}/imagem`, { method: 'POST', body: form });
+  },
 
   // ALUNOS
   getAlunos: () => fetch(`${BASE}/alunos`).then(r => r.json()),

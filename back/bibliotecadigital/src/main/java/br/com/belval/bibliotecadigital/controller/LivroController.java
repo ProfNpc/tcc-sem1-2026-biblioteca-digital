@@ -5,8 +5,13 @@ import br.com.belval.bibliotecadigital.repository.LivroRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.*;
 import java.util.List;
+import java.util.UUID;
 
 @CrossOrigin(origins = {"http://localhost:5173", "http://localhost:3000", "http://localhost:5500", "http://127.0.0.1:5500", "null"})
 @RestController
@@ -15,14 +20,19 @@ public class LivroController {
 
     private final LivroRepository livroRepository;
 
+    // Pasta onde as imagens ficam salvas (dentro do projeto, pasta uploads)
+    private static final String UPLOAD_DIR = "uploads/capas/";
+
     public LivroController(LivroRepository livroRepository) {
         this.livroRepository = livroRepository;
+        // Cria a pasta se não existir
+        new File(UPLOAD_DIR).mkdirs();
     }
 
-    // Retorna todos os livros cadastrados
+    // Lista só os livros ATIVOS (exclusão lógica)
     @GetMapping
     public List<Livro> listarTodos() {
-        return livroRepository.findAll();
+        return livroRepository.findByAtivoTrue();
     }
 
     @GetMapping("/{id}")
@@ -32,13 +42,14 @@ public class LivroController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    // Salva um novo livro no banco de dados
+    // Cadastra novo livro (sem imagem - JSON normal)
     @PostMapping
     public ResponseEntity<Livro> adicionar(@RequestBody Livro livro) {
-        Livro livroSalvo = livroRepository.save(livro);
-        return ResponseEntity.status(HttpStatus.CREATED).body(livroSalvo);
+        livro.setAtivo(true);
+        return ResponseEntity.status(HttpStatus.CREATED).body(livroRepository.save(livro));
     }
 
+    // Atualiza livro (sem imagem)
     @PutMapping("/{id}")
     public ResponseEntity<Livro> atualizar(@PathVariable Long id, @RequestBody Livro livro) {
         return livroRepository.findById(id).map(existente -> {
@@ -46,20 +57,49 @@ public class LivroController {
             existente.setAutor(livro.getAutor());
             existente.setAnoPublicacao(livro.getAnoPublicacao());
             existente.setIsbn(livro.getIsbn());
-            // Mantém a disponibilidade atual ou atualiza se vier no corpo
             if (livro.getDisponivel() != null) existente.setDisponivel(livro.getDisponivel());
-            
-            Livro salvo = livroRepository.save(existente);
-            return ResponseEntity.ok(salvo);
+            return ResponseEntity.ok(livroRepository.save(existente));
         }).orElse(ResponseEntity.notFound().build());
     }
 
+    // EXCLUSÃO LÓGICA: só marca ativo = false, não apaga do banco
     @DeleteMapping("/{id}")
     public ResponseEntity<?> excluir(@PathVariable Long id) {
-        if (livroRepository.existsById(id)) {
-            livroRepository.deleteById(id);
+        return livroRepository.findById(id).map(livro -> {
+            livro.setAtivo(false);
+            livroRepository.save(livro);
             return ResponseEntity.ok().build();
-        }
-        return ResponseEntity.notFound().build();
+        }).orElse(ResponseEntity.notFound().build());
+    }
+
+    // UPLOAD DE IMAGEM: recebe o arquivo e salva no servidor
+    @PostMapping("/{id}/imagem")
+    public ResponseEntity<?> uploadImagem(@PathVariable Long id,
+                                          @RequestParam("arquivo") MultipartFile arquivo) {
+        return livroRepository.findById(id).map(livro -> {
+            try {
+                // Gera nome único para o arquivo
+                String ext = arquivo.getOriginalFilename() != null
+                        ? arquivo.getOriginalFilename().substring(arquivo.getOriginalFilename().lastIndexOf('.'))
+                        : ".jpg";
+                String nomeArquivo = UUID.randomUUID().toString() + ext;
+
+                Path destino = Paths.get(UPLOAD_DIR + nomeArquivo);
+                Files.copy(arquivo.getInputStream(), destino, StandardCopyOption.REPLACE_EXISTING);
+
+                // Apaga imagem antiga se existir
+                if (livro.getImagemCapa() != null) {
+                    try { Files.deleteIfExists(Paths.get(UPLOAD_DIR + livro.getImagemCapa())); } catch (Exception ignored) {}
+                }
+
+                livro.setImagemCapa(nomeArquivo);
+                livroRepository.save(livro);
+
+                return ResponseEntity.ok().body("{\"imagem\":\"" + nomeArquivo + "\"}");
+            } catch (IOException e) {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                        .body("{\"erro\":\"Falha ao salvar imagem\"}");
+            }
+        }).orElse(ResponseEntity.notFound().build());
     }
 }
