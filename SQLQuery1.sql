@@ -11,8 +11,10 @@ JOIN livro l ON e.titulo_livro = l.titulo;
 
 SELECT COUNT(*) AS total_alunos FROM aluno;
 
-DELETE FROM aluno WHERE id = 10002;
+DELETE FROM aluno WHERE id = 5;
 
 SELECT * FROM emprestimo WHERE status = 'RESERVADO';
 
 SELECT * FROM livro;
+
+DROP DATABASE bibliotecadigital;

@@ -304,7 +304,7 @@ footer {
     box-shadow: 0 2px 5px rgba(0,0,0,0.2);
 }
 
-/* --- BOTÕES DE PORTAL (ALUNO OU adim) --- */
+/* --- BOTÕES DE PORTAL (ALUNO OU a) --- */
 .escolha-botoes {
     gap: 20px !important;
 }
@@ -329,7 +329,7 @@ footer {
 
 .btn-escolha.admin {
     background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-    box-shadow: 0 10px 25px rgba(15, 23, 42, 0.3);
+    box-shadow: 0 10px 25px rgba(36, 15, 42, 0.3);
 }
 
 .btn-escolha:hover {

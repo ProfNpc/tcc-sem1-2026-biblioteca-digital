@@ -58,6 +58,8 @@ export default function App() {
                 🔐 Login
               </button>
             </>
+
+            
           )}
 
           {usuario && perfil === 'ALUNO' && (

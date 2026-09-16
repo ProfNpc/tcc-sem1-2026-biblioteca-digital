@@ -78,7 +78,7 @@ export default function LoginPage({ onLogin }) {
             <form onSubmit={fazerLogin}>
               <div className="campo">
                 <label>{intencao === 'ADMIN' ? 'Usuário Admin' : 'RA do Aluno'}</label>
-                <input type="text" placeholder="Digite seu RA" value={ra} onChange={e => setRa(e.target.value)} required />
+                <input type="text" placeholder="Digite seu Usuário" value={ra} onChange={e => setRa(e.target.value)} required />
               </div>
               <div className="campo">
                 <label>Senha</label>
@@ -104,8 +104,8 @@ export default function LoginPage({ onLogin }) {
                 <input type="text" placeholder="Ex: João da Silva" value={nome} onChange={e => setNome(e.target.value)} required />
               </div>
               <div className="campo">
-                <label>RA do Aluno</label>
-                <input type="text" placeholder="Digite seu RA" value={cadRa} onChange={e => setCadRa(e.target.value)} required />
+                <label>Usuário</label>
+                <input type="text" placeholder="Digite seu nome de usuário" value={cadRa} onChange={e => setCadRa(e.target.value)} required />
               </div>
               <div className="campo">
                 <label>Senha</label>
