@@ -1,15 +1,7 @@
 import { useEffect, useState } from 'react';
-import { api } from '../services/api';
+import { api, IMG_BASE } from '../services/api';
 import { POLOS } from '../constants/unidades';
-
-function getCapaUrl(titulo) {
-  const t = titulo.toLowerCase();
-  if (t.includes('1984') || t.includes('casmurro') || t.includes('nárnia')) return 'https://images.unsplash.com/photo-1608178398319-48f814d0750c?auto=format&fit=crop&w=400&q=80';
-  if (t.includes('harry')) return 'https://images.unsplash.com/photo-1579532537598-459ecdaf39cc?auto=format&fit=crop&w=400&q=80';
-  if (t.includes('design') || t.includes('arte')) return 'https://images.unsplash.com/photo-1561070791-2526d30994b5?auto=format&fit=crop&w=400&q=80';
-  if (t.includes('código') || t.includes('algoritmo') || t.includes('engenharia')) return 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=400&q=80';
-  return 'https://images.unsplash.com/photo-1544947950-fa07a98d237f?auto=format&fit=crop&w=400&q=80';
-}
+import CapaLivro from '../components/CapaLivro';
 
 export default function CatalogoPage({ onIrParaLogin }) {
   const [livros, setLivros] = useState([]);
@@ -43,7 +35,8 @@ export default function CatalogoPage({ onIrParaLogin }) {
       <div className="grid-livros">
         {livros.map(livro => (
           <div key={livro.id} className="card-livro">
-            <div className="card-capa" style={{ backgroundImage: `url('${getCapaUrl(livro.titulo)}')` }}>
+            <div className="card-capa">
+              <CapaLivro livro={livro} alt={`Capa de ${livro.titulo}`} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
               <span className={`badge-disp ${livro.disponivel ? 'badge-ok' : 'badge-no'}`}>
                 {livro.disponivel ? 'Disponível' : 'Emprestado'}
               </span>

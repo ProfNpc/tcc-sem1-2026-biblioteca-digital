@@ -27,7 +27,16 @@ public class EmprestimoController {
 
     @GetMapping("/aluno/{nome}")
     public List<Emprestimo> listarPorAluno(@PathVariable String nome) {
-        return emprestimoRepository.findByNomeAluno(nome);
+        return emprestimoRepository.findByNomeAluno(nome).stream()
+                .filter(e -> !"DEVOLVIDO".equals(e.getStatus()) && !"CANCELADO".equals(e.getStatus()))
+                .collect(Collectors.toList());
+    }
+
+    @GetMapping("/aluno/{nome}/historico")
+    public List<Emprestimo> historicoPorAluno(@PathVariable String nome) {
+        return emprestimoRepository.findByNomeAluno(nome).stream()
+                .filter(e -> "DEVOLVIDO".equals(e.getStatus()) || "CANCELADO".equals(e.getStatus()))
+                .collect(Collectors.toList());
     }
 
     @PostMapping
@@ -82,14 +91,26 @@ public class EmprestimoController {
                 livro.setQuantidadeDisponivel(Math.min(total, disponivelAtual + 1));
                 livroRepository.save(livro);
             });
-            emprestimoRepository.deleteById(id);
+            emp.setStatus("CANCELADO");
+            emp.setDataDevolucaoReal(LocalDate.now());
+            emprestimoRepository.save(emp);
             return ResponseEntity.ok().build();
         }).orElse(ResponseEntity.notFound().build());
     }
 
     @GetMapping("/todos")
     public List<Emprestimo> listarTodos() {
-        return emprestimoRepository.findAll();
+        return emprestimoRepository.findByStatusNot("DEVOLVIDO").stream()
+                .filter(e -> !"CANCELADO".equals(e.getStatus()))
+                .collect(Collectors.toList());
+    }
+
+    // Histórico: mantém devolvidos e cancelados para consulta administrativa.
+    @GetMapping("/historico")
+    public List<Emprestimo> listarHistorico() {
+        return emprestimoRepository.findAll().stream()
+                .filter(e -> "DEVOLVIDO".equals(e.getStatus()) || "CANCELADO".equals(e.getStatus()))
+                .collect(Collectors.toList());
     }
 
     @PostMapping("/{id}/entregar")
@@ -111,10 +132,10 @@ public class EmprestimoController {
                 livro.setQuantidadeDisponivel(Math.min(total, disponivelAtual + 1));
                 livroRepository.save(livro);
             });
-            // Em vez de deletar, o ideal seria marcar como DEVOLVIDO para manter histórico
-            // (ver sugestão sobre histórico de empréstimos). Por ora mantive o comportamento
-            // original de apagar o registro, só corrigindo a devolução do exemplar ao estoque.
-            emprestimoRepository.deleteById(id);
+            // Mantém o registro no banco para formar o histórico de empréstimos.
+            emp.setStatus("DEVOLVIDO");
+            emp.setDataDevolucaoReal(LocalDate.now());
+            emprestimoRepository.save(emp);
             return ResponseEntity.ok().build();
         }).orElse(ResponseEntity.notFound().build());
     }

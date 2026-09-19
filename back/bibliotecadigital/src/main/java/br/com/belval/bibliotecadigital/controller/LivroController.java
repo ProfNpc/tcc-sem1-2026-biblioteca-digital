@@ -2,9 +2,12 @@ package br.com.belval.bibliotecadigital.controller;
 
 import br.com.belval.bibliotecadigital.model.Livro;
 import br.com.belval.bibliotecadigital.repository.LivroRepository;
+import br.com.belval.bibliotecadigital.repository.EmprestimoRepository;
+import br.com.belval.bibliotecadigital.model.Emprestimo;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -19,25 +22,32 @@ import java.util.UUID;
 public class LivroController {
 
     private final LivroRepository livroRepository;
+    private final EmprestimoRepository emprestimoRepository;
 
     // Pasta onde as imagens ficam salvas (dentro do projeto, pasta uploads)
     private static final String UPLOAD_DIR = "uploads/capas/";
 
-    public LivroController(LivroRepository livroRepository) {
+    public LivroController(LivroRepository livroRepository, EmprestimoRepository emprestimoRepository) {
         this.livroRepository = livroRepository;
+        this.emprestimoRepository = emprestimoRepository;
         // Cria a pasta se não existir
         new File(UPLOAD_DIR).mkdirs();
     }
 
-    // Lista só os livros ATIVOS (exclusão lógica).
+    // Lista somente livros ativos. Registros novos são excluídos fisicamente;
     // Se "unidade" for informado, retorna só os livros daquela unidade
     // (usado no catálogo do aluno, pra evitar reservar livro que não existe no seu polo).
     @GetMapping
     public List<Livro> listarTodos(@RequestParam(required = false) String unidade) {
+        List<Livro> ativos = livroRepository.findAll().stream()
+                .filter(l -> !Boolean.FALSE.equals(l.getAtivo()))
+                .toList();
         if (unidade != null && !unidade.isBlank()) {
-            return livroRepository.findByAtivoTrueAndUnidade(unidade);
+            return ativos.stream()
+                    .filter(l -> unidade.equals(l.getUnidade()))
+                    .toList();
         }
-        return livroRepository.findByAtivoTrue();
+        return ativos;
     }
 
     @GetMapping("/{id}")
@@ -56,7 +66,9 @@ public class LivroController {
         livro.setTitulo(livro.getTitulo().trim());
 
         // Regra de Negócio: não pode cadastrar dois livros com o mesmo título
-        if (livroRepository.findByTituloIgnoreCaseAndAtivoTrue(livro.getTitulo()).isPresent()) {
+        if (livroRepository.findByTituloIgnoreCase(livro.getTitulo())
+                .filter(l -> !Boolean.FALSE.equals(l.getAtivo()))
+                .isPresent()) {
             return ResponseEntity.status(HttpStatus.CONFLICT)
                     .body("Já existe um livro cadastrado com este título.");
         }
@@ -79,7 +91,8 @@ public class LivroController {
                 String novoTitulo = livro.getTitulo().trim();
                 // Se o título está mudando, garante que não colide com outro livro ativo
                 if (!novoTitulo.equalsIgnoreCase(existente.getTitulo())) {
-                    boolean colide = livroRepository.findByTituloIgnoreCaseAndAtivoTrue(novoTitulo)
+                    boolean colide = livroRepository.findByTituloIgnoreCase(novoTitulo)
+                            .filter(l -> !Boolean.FALSE.equals(l.getAtivo()))
                             .filter(l -> !l.getId().equals(id))
                             .isPresent();
                     if (colide) {
@@ -110,12 +123,43 @@ public class LivroController {
         }).orElse(ResponseEntity.notFound().build());
     }
 
-    // EXCLUSÃO LÓGICA: só marca ativo = false, não apaga do banco
+    // EXCLUSÃO FÍSICA: remove o livro de verdade do banco e apaga sua capa.
+    // Empréstimos antigos não são apagados: eles viram histórico e continuam
+    // guardando o título do livro mesmo depois da exclusão do cadastro.
+    @Transactional
     @DeleteMapping("/{id}")
     public ResponseEntity<?> excluir(@PathVariable Long id) {
         return livroRepository.findById(id).map(livro -> {
-            livro.setAtivo(false);
-            livroRepository.save(livro);
+            // Se houver reserva/empréstimo ativo desse livro, encerra como CANCELADO
+            // para não deixar uma reserva apontando para um livro que já não existe.
+            emprestimoRepository.findByTituloLivroAndStatusNot(livro.getTitulo(), "DEVOLVIDO")
+                    .forEach(emp -> {
+                        emp.setStatus("CANCELADO");
+                        emp.setDataDevolucaoReal(java.time.LocalDate.now());
+                        emprestimoRepository.save(emp);
+                    });
+
+            // Remove a imagem salva no servidor.
+            if (livro.getImagemCapa() != null && !livro.getImagemCapa().isBlank()) {
+                try {
+                    Files.deleteIfExists(Paths.get(UPLOAD_DIR + livro.getImagemCapa()));
+                } catch (Exception ignored) {}
+            }
+
+            livroRepository.delete(livro);
+            livroRepository.flush();
+
+            // Remove também registros antigos que ficaram marcados como inativos
+            // pela versão anterior do sistema.
+            livroRepository.excluirLivrosInativos();
+            livroRepository.flush();
+
+            // Só reinicia o contador quando não restou nenhum livro.
+            // Assim, depois de apagar todo o acervo, o próximo livro será #1.
+            if (livroRepository.count() == 0) {
+                livroRepository.resetarIdentidade();
+            }
+
             return ResponseEntity.ok().build();
         }).orElse(ResponseEntity.notFound().build());
     }

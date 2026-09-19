@@ -117,7 +117,7 @@ export default function AdminAlunosPage() {
                 <label>Nome Completo</label>
                 <input required value={form.nome} onChange={e => setForm(f => ({ ...f, nome: e.target.value }))} />
               </div>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+              <div className="form-grid-2">
                 <div className="campo">
                   <label>RA</label>
                   <input required value={form.ra} onChange={e => setForm(f => ({ ...f, ra: e.target.value }))} />

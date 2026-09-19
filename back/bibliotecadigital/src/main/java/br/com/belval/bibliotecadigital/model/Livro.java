@@ -21,7 +21,7 @@ public class Livro {
     private Integer quantidadeTotal = 1;
     private Integer quantidadeDisponivel = 1;
 
-    // EXCLUSÃO LÓGICA: false = excluído, true = ativo
+    // Compatibilidade com dados antigos: registros novos ficam ativos; exclusão atual é física.
     private Boolean ativo = true;
 
     // UPLOAD DE IMAGEM: armazena o nome do arquivo salvo no servidor

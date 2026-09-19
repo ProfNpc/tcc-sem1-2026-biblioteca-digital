@@ -18,7 +18,11 @@ public class Emprestimo {
     private String tituloLivro;
     private LocalDate dataReserva;
     private LocalDate dataDevolucao;
-    private String status; // EM_DIA ou VENCIDO (mas vai ser calculado no front tbm)
+    private String status; // RESERVADO, RETIRADO, DEVOLVIDO ou CANCELADO
+
+    // Data em que o empréstimo/reserva foi efetivamente encerrado.
+    // dataDevolucao continua representando a data limite prevista.
+    private LocalDate dataDevolucaoReal;
     
     // Novo atributo para a escolha física do ponto do ITB
     private String poloRetirada;
@@ -72,6 +76,14 @@ public class Emprestimo {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public LocalDate getDataDevolucaoReal() {
+        return dataDevolucaoReal;
+    }
+
+    public void setDataDevolucaoReal(LocalDate dataDevolucaoReal) {
+        this.dataDevolucaoReal = dataDevolucaoReal;
     }
 
     public String getPoloRetirada() {

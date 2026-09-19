@@ -66,7 +66,9 @@ export const api = {
 
   // EMPRESTIMOS
   getEmprestimos: () => fetch(`${BASE}/emprestimos/todos`, { headers: authHeaders() }).then(r => r.json()),
+  getHistoricoEmprestimos: () => fetch(`${BASE}/emprestimos/historico`, { headers: authHeaders() }).then(r => r.json()),
   getEmprestimosPorAluno: (nome) => fetch(`${BASE}/emprestimos/aluno/${encodeURIComponent(nome)}`, { headers: authHeaders() }).then(r => r.json()),
+  getHistoricoPorAluno: (nome) => fetch(`${BASE}/emprestimos/aluno/${encodeURIComponent(nome)}/historico`, { headers: authHeaders() }).then(r => r.json()),
   criarEmprestimo: (data) => fetch(`${BASE}/emprestimos`, { method: 'POST', headers: authHeaders({ 'Content-Type': 'application/json' }), body: JSON.stringify(data) }),
   cancelarEmprestimo: (id) => fetch(`${BASE}/emprestimos/${id}`, { method: 'DELETE', headers: authHeaders() }),
   confirmarEntrega: (id) => fetch(`${BASE}/emprestimos/${id}/entregar`, { method: 'POST', headers: authHeaders() }),

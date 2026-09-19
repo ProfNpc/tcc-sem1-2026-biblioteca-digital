@@ -2,17 +2,7 @@ import { useEffect, useState } from 'react';
 import { api, IMG_BASE } from '../services/api';
 import { useToast } from '../components/Toast';
 
-const CAPA_PADRAO = 'https://images.unsplash.com/photo-1544947950-fa07a98d237f?auto=format&fit=crop&w=400&q=80';
-
-function getCapaUrl(livro) {
-  if (livro.imagemCapa) return `${IMG_BASE}/${livro.imagemCapa}`;
-  const t = livro.titulo.toLowerCase();
-  if (t.includes('1984') || t.includes('casmurro')) return 'https://images.unsplash.com/photo-1608178398319-48f814d0750c?auto=format&fit=crop&w=400&q=80';
-  if (t.includes('harry')) return 'https://images.unsplash.com/photo-1579532537598-459ecdaf39cc?auto=format&fit=crop&w=400&q=80';
-  if (t.includes('design') || t.includes('arte')) return 'https://images.unsplash.com/photo-1561070791-2526d30994b5?auto=format&fit=crop&w=400&q=80';
-  if (t.includes('código') || t.includes('algoritmo')) return 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=400&q=80';
-  return CAPA_PADRAO;
-}
+import CapaLivro from '../components/CapaLivro';
 
 export default function AcervoPage({ usuario, unidade }) {
   const [livros, setLivros] = useState([]);
@@ -74,7 +64,8 @@ export default function AcervoPage({ usuario, unidade }) {
       <div className="grid-livros">
         {livrosFiltrados.map(livro => (
           <div key={livro.id} className="card-livro">
-            <div className="card-capa" style={{ backgroundImage: `url('${getCapaUrl(livro)}')` }}>
+            <div className="card-capa">
+              <CapaLivro livro={livro} alt={`Capa de ${livro.titulo}`} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
               <span className={`badge-disp ${livro.disponivel ? 'badge-ok' : 'badge-no'}`}>
                 {livro.disponivel ? 'Disponível' : 'Emprestado'}
               </span>

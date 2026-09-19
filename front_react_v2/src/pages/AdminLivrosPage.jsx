@@ -2,9 +2,9 @@ import { useEffect, useState, useRef } from 'react';
 import { api, IMG_BASE } from '../services/api';
 import { useToast } from '../components/Toast';
 import { NOMES_UNIDADES } from '../constants/unidades';
+import { getCapaGenerica } from '../capas';
 
 const VAZIO = { titulo: '', autor: '', anoPublicacao: '', isbn: '', unidade: NOMES_UNIDADES[0], quantidadeTotal: 1 };
-const CAPA_PADRAO = 'https://images.unsplash.com/photo-1544947950-fa07a98d237f?auto=format&fit=crop&w=400&q=80';
 
 export default function AdminLivrosPage() {
   const [livros, setLivros] = useState([]);
@@ -110,8 +110,9 @@ export default function AdminLivrosPage() {
             <tr key={l.id}>
               <td>
                 <img
-                  src={l.imagemCapa ? `${IMG_BASE}/${l.imagemCapa}` : CAPA_PADRAO}
+                  src={l.imagemCapa ? `${IMG_BASE}/${l.imagemCapa}` : getCapaGenerica(l)}
                   alt={l.titulo}
+                  onError={e => { e.currentTarget.onerror = null; e.currentTarget.src = getCapaGenerica(l); }}
                   style={{ width: '48px', height: '60px', objectFit: 'cover', borderRadius: '6px', boxShadow: '0 2px 6px rgba(0,0,0,0.15)' }}
                 />
               </td>
@@ -144,8 +145,9 @@ export default function AdminLivrosPage() {
               {/* PREVIEW DA IMAGEM */}
               <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px', marginBottom: '20px' }}>
                 <img
-                  src={imagemPreview || CAPA_PADRAO}
+                  src={imagemPreview || getCapaGenerica(form)}
                   alt="Capa do livro"
+                  onError={e => { e.currentTarget.onerror = null; e.currentTarget.src = getCapaGenerica(form); }}
                   style={{ width: '100px', height: '130px', objectFit: 'cover', borderRadius: '10px', boxShadow: '0 4px 12px rgba(0,0,0,0.15)', border: '2px solid #e2e8f0' }}
                 />
                 <button type="button" className="btn-cancelar" style={{ fontSize: '0.85rem', padding: '7px 16px' }} onClick={() => inputImagemRef.current.click()}>
@@ -162,7 +164,7 @@ export default function AdminLivrosPage() {
                 <label>Autor</label>
                 <input required value={form.autor} onChange={e => setForm(f => ({ ...f, autor: e.target.value }))} />
               </div>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+              <div className="form-grid-2">
                 <div className="campo">
                   <label>Ano de Publicação</label>
                   <input type="number" required value={form.anoPublicacao} onChange={e => setForm(f => ({ ...f, anoPublicacao: e.target.value }))} />
@@ -172,7 +174,7 @@ export default function AdminLivrosPage() {
                   <input value={form.isbn} onChange={e => setForm(f => ({ ...f, isbn: e.target.value }))} />
                 </div>
               </div>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+              <div className="form-grid-2">
                 <div className="campo">
                   <label>Unidade</label>
                   <select className="polo-select" required value={form.unidade} onChange={e => setForm(f => ({ ...f, unidade: e.target.value }))}>

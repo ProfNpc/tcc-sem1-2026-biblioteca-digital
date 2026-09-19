@@ -7,16 +7,16 @@ export default function ReservasPage({ usuario }) {
   const [loading, setLoading] = useState(true);
   const [confirmId, setConfirmId] = useState(null);
   const [confirmTitulo, setConfirmTitulo] = useState('');
+  const [historico, setHistorico] = useState(false);
   const toast = useToast();
 
   function carregar() {
     setLoading(true);
-    api.getEmprestimosPorAluno(usuario)
-      .then(setReservas)
-      .finally(() => setLoading(false));
+    const chamada = historico ? api.getHistoricoPorAluno(usuario) : api.getEmprestimosPorAluno(usuario);
+    chamada.then(setReservas).finally(() => setLoading(false));
   }
 
-  useEffect(() => { carregar(); }, [usuario]);
+  useEffect(() => { carregar(); }, [usuario, historico]);
 
   async function cancelar() {
     const resp = await api.cancelarEmprestimo(confirmId);
@@ -33,7 +33,10 @@ export default function ReservasPage({ usuario }) {
   return (
     <div className="tabela-container">
       <div className="tabela-header">
-        <h2>📋 Minhas Reservas</h2>
+        <h2>{historico ? '📚 Histórico de Empréstimos' : '📋 Minhas Reservas'}</h2>
+        <button className="btn-cancelar" onClick={() => setHistorico(h => !h)}>
+          {historico ? '← Voltar às Reservas' : '📚 Ver Histórico'}
+        </button>
       </div>
 
       {loading && <p className="loading">Carregando reservas...</p>}
@@ -68,9 +71,16 @@ export default function ReservasPage({ usuario }) {
                     </span>
                   </td>
                   <td>
-                    <button className="btn-icone btn-deletar" onClick={() => { setConfirmId(r.id); setConfirmTitulo(r.tituloLivro); }}>
-                      ✕ Cancelar
-                    </button>
+                    {!historico && (
+                      <button className="btn-icone btn-deletar" onClick={() => { setConfirmId(r.id); setConfirmTitulo(r.tituloLivro); }}>
+                        ✕ Cancelar
+                      </button>
+                    )}
+                    {historico && (
+                      <span className={`status ${r.status === 'DEVOLVIDO' ? 'status-verde' : 'status-vermelho'}`}>
+                        {r.status === 'DEVOLVIDO' ? `Devolvido em ${formatarData(r.dataDevolucaoReal)}` : 'Cancelado'}
+                      </span>
+                    )}
                   </td>
                 </tr>
               );
