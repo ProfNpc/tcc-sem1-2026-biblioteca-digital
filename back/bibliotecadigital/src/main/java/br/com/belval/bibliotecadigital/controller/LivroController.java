@@ -29,9 +29,14 @@ public class LivroController {
         new File(UPLOAD_DIR).mkdirs();
     }
 
-    // Lista só os livros ATIVOS (exclusão lógica)
+    // Lista só os livros ATIVOS (exclusão lógica).
+    // Se "unidade" for informado, retorna só os livros daquela unidade
+    // (usado no catálogo do aluno, pra evitar reservar livro que não existe no seu polo).
     @GetMapping
-    public List<Livro> listarTodos() {
+    public List<Livro> listarTodos(@RequestParam(required = false) String unidade) {
+        if (unidade != null && !unidade.isBlank()) {
+            return livroRepository.findByAtivoTrueAndUnidade(unidade);
+        }
         return livroRepository.findByAtivoTrue();
     }
 
@@ -44,20 +49,63 @@ public class LivroController {
 
     // Cadastra novo livro (sem imagem - JSON normal)
     @PostMapping
-    public ResponseEntity<Livro> adicionar(@RequestBody Livro livro) {
+    public ResponseEntity<?> adicionar(@RequestBody Livro livro) {
+        if (livro.getTitulo() == null || livro.getTitulo().trim().isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Informe o título do livro.");
+        }
+        livro.setTitulo(livro.getTitulo().trim());
+
+        // Regra de Negócio: não pode cadastrar dois livros com o mesmo título
+        if (livroRepository.findByTituloIgnoreCaseAndAtivoTrue(livro.getTitulo()).isPresent()) {
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body("Já existe um livro cadastrado com este título.");
+        }
+
         livro.setAtivo(true);
+
+        // Quantidade de exemplares: se não vier informada, assume 1
+        int total = (livro.getQuantidadeTotal() != null && livro.getQuantidadeTotal() > 0) ? livro.getQuantidadeTotal() : 1;
+        livro.setQuantidadeTotal(total);
+        livro.setQuantidadeDisponivel(total); // livro novo começa com todos os exemplares disponíveis
+
         return ResponseEntity.status(HttpStatus.CREATED).body(livroRepository.save(livro));
     }
 
     // Atualiza livro (sem imagem)
     @PutMapping("/{id}")
-    public ResponseEntity<Livro> atualizar(@PathVariable Long id, @RequestBody Livro livro) {
-        return livroRepository.findById(id).map(existente -> {
-            existente.setTitulo(livro.getTitulo());
+    public ResponseEntity<?> atualizar(@PathVariable Long id, @RequestBody Livro livro) {
+        return livroRepository.findById(id).<ResponseEntity<?>>map(existente -> {
+            if (livro.getTitulo() != null) {
+                String novoTitulo = livro.getTitulo().trim();
+                // Se o título está mudando, garante que não colide com outro livro ativo
+                if (!novoTitulo.equalsIgnoreCase(existente.getTitulo())) {
+                    boolean colide = livroRepository.findByTituloIgnoreCaseAndAtivoTrue(novoTitulo)
+                            .filter(l -> !l.getId().equals(id))
+                            .isPresent();
+                    if (colide) {
+                        return ResponseEntity.status(HttpStatus.CONFLICT)
+                                .body("Já existe um livro cadastrado com este título.");
+                    }
+                }
+                existente.setTitulo(novoTitulo);
+            }
             existente.setAutor(livro.getAutor());
             existente.setAnoPublicacao(livro.getAnoPublicacao());
             existente.setIsbn(livro.getIsbn());
-            if (livro.getDisponivel() != null) existente.setDisponivel(livro.getDisponivel());
+            if (livro.getUnidade() != null) existente.setUnidade(livro.getUnidade());
+
+            // Ajuste de estoque: se o total mudar, aplica a mesma diferença no disponível
+            // (ex: tinha 3 no total e 1 disponível/2 emprestados; se o total sobe pra 5, disponível vira 3)
+            if (livro.getQuantidadeTotal() != null && !livro.getQuantidadeTotal().equals(existente.getQuantidadeTotal())) {
+                int totalAntigo = existente.getQuantidadeTotal() != null ? existente.getQuantidadeTotal() : 0;
+                int disponivelAntigo = existente.getQuantidadeDisponivel() != null ? existente.getQuantidadeDisponivel() : 0;
+                int novoTotal = Math.max(0, livro.getQuantidadeTotal());
+                int diferenca = novoTotal - totalAntigo;
+                int novoDisponivel = Math.max(0, Math.min(novoTotal, disponivelAntigo + diferenca));
+                existente.setQuantidadeTotal(novoTotal);
+                existente.setQuantidadeDisponivel(novoDisponivel);
+            }
+
             return ResponseEntity.ok(livroRepository.save(existente));
         }).orElse(ResponseEntity.notFound().build());
     }

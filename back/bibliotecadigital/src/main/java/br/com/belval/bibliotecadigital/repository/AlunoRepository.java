@@ -7,9 +7,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface AlunoRepository extends JpaRepository<Aluno, Long> {
 
-    // Busca por RA e Senha (método padrão Spring Data - funciona com H2)
-    Aluno findByRaAndSenha(String ra, String senha);
-
-    // Busca só por RA (para verificar duplicidade no seed)
+    // Busca só por RA (usada no login - a senha agora é comparada via hash - e nas checagens de duplicidade)
     Aluno findByRa(String ra);
 }

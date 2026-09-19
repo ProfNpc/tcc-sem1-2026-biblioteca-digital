@@ -2,10 +2,12 @@ package br.com.belval.bibliotecadigital.model;
 
 import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Transient;
 
 @Entity
 public class Aluno {
@@ -25,6 +27,16 @@ public class Aluno {
 
     // Perfil do usuário: ALUNO ou ADMIN
     private String perfil;
+
+    // Unidade (polo/ITB) em que o aluno estuda - define quais livros ele pode ver/reservar
+    private String unidade;
+
+    // Token de sessão (não fica salvo no banco): só existe pra viajar na resposta do login
+    @Transient
+    private String token;
+
+    public String getToken() { return token; }
+    public void setToken(String token) { this.token = token; }
 
     // Construtor vazio essencial para o banco de dados funcionar
     public Aluno() {
@@ -64,6 +76,10 @@ public class Aluno {
         this.email = email;
     }
 
+    // WRITE_ONLY: a senha pode vir no corpo da requisição (cadastro/login),
+    // mas NUNCA é incluída de volta no JSON de resposta - antes disso, o
+    // hash da senha de todo mundo aparecia em qualquer chamada que devolvesse um Aluno.
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     public String getSenha() {
         return senha;
     }
@@ -79,6 +95,14 @@ public class Aluno {
     public void setPerfil(String perfil) {
         this.perfil = perfil;
         
+    }
+
+    public String getUnidade() {
+        return unidade;
+    }
+
+    public void setUnidade(String unidade) {
+        this.unidade = unidade;
     }
 
 	@Override
@@ -100,13 +124,8 @@ public class Aluno {
 
 	@Override
 	public String toString() {
-		return "Aluno [id=" + id + ", nome=" + nome + ", ra=" + ra + ", email=" + email + ", senha=" + senha
-				+ ", perfil=" + perfil + "]";
-	}
-    public static void main(String[] args) {
-		Aluno p = new Aluno ();
-		p.setId(223L);
-		System.out.println(p.toString());
+		return "Aluno [id=" + id + ", nome=" + nome + ", ra=" + ra + ", email=" + email
+				+ ", perfil=" + perfil + ", unidade=" + unidade + "]";
 	}
 }
 

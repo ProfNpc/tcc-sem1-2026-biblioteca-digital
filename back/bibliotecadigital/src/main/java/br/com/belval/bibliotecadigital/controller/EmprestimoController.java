@@ -39,13 +39,31 @@ public class EmprestimoController {
                     .body("Limite de 3 reservas atingido. Devolva um livro para liberar espaço.");
         }
 
-        // NOVO: Regra de Negócio - Limite de 5 alunos por Polo para o mesmo livro
-        long countPolo = emprestimoRepository.countByTituloLivroAndPoloRetirada(emprestimo.getTituloLivro(), emprestimo.getPoloRetirada());
-        if (countPolo >= 5) {
+        // Regra de Negócio: não pode reservar o mesmo livro duas vezes
+        boolean jaReservou = reservasAtuais.stream()
+                .anyMatch(r -> r.getTituloLivro() != null && r.getTituloLivro().equalsIgnoreCase(emprestimo.getTituloLivro()));
+        if (jaReservou) {
             return ResponseEntity.status(HttpStatus.CONFLICT)
-                    .body("Este Polo (" + emprestimo.getPoloRetirada() + ") já atingiu o limite de 5 reservas para este livro.");
+                    .body("Você já possui uma reserva ativa deste livro.");
         }
 
+        // Regra de Negócio: só reserva se existir exemplar disponível no estoque
+        var livroOpt = livroRepository.findByTitulo(emprestimo.getTituloLivro());
+        if (livroOpt.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Livro não encontrado.");
+        }
+        var livro = livroOpt.get();
+        if (livro.getQuantidadeDisponivel() == null || livro.getQuantidadeDisponivel() <= 0) {
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body("Não há exemplares disponíveis deste livro no momento.");
+        }
+
+        // Baixa 1 exemplar do estoque
+        livro.setQuantidadeDisponivel(livro.getQuantidadeDisponivel() - 1);
+        livroRepository.save(livro);
+
+        // A retirada é sempre na unidade onde o exemplar está fisicamente (não é mais escolha livre do aluno)
+        emprestimo.setPoloRetirada(livro.getUnidade());
         emprestimo.setDataReserva(LocalDate.now());
         emprestimo.setDataDevolucao(LocalDate.now().plusDays(7));
         emprestimo.setStatus("EM_DIA");
@@ -57,9 +75,11 @@ public class EmprestimoController {
     @DeleteMapping("/{id}")
     public ResponseEntity<?> cancelarReserva(@PathVariable Long id) {
         return emprestimoRepository.findById(id).map(emp -> {
-            // Volta o livro para disponível
+            // Devolve o exemplar ao estoque
             livroRepository.findByTitulo(emp.getTituloLivro()).ifPresent(livro -> {
-                livro.setDisponivel(true);
+                int total = livro.getQuantidadeTotal() != null ? livro.getQuantidadeTotal() : 1;
+                int disponivelAtual = livro.getQuantidadeDisponivel() != null ? livro.getQuantidadeDisponivel() : 0;
+                livro.setQuantidadeDisponivel(Math.min(total, disponivelAtual + 1));
                 livroRepository.save(livro);
             });
             emprestimoRepository.deleteById(id);
@@ -84,9 +104,17 @@ public class EmprestimoController {
     @PostMapping("/{id}/devolver")
     public ResponseEntity<?> confirmarDevolucao(@PathVariable Long id) {
         return emprestimoRepository.findById(id).map(emp -> {
-            // Em vez de deletar, poderíamos marcar como DEVOLVIDO 
-            // Mas para o controle de polo de 5 vagas ser dinâmico, DELETAR funciona bem (libera vaga)
-            emprestimoRepository.deleteById(id); 
+            // Devolve o exemplar ao estoque (antes isso nunca acontecia: o livro "sumia" do sistema)
+            livroRepository.findByTitulo(emp.getTituloLivro()).ifPresent(livro -> {
+                int total = livro.getQuantidadeTotal() != null ? livro.getQuantidadeTotal() : 1;
+                int disponivelAtual = livro.getQuantidadeDisponivel() != null ? livro.getQuantidadeDisponivel() : 0;
+                livro.setQuantidadeDisponivel(Math.min(total, disponivelAtual + 1));
+                livroRepository.save(livro);
+            });
+            // Em vez de deletar, o ideal seria marcar como DEVOLVIDO para manter histórico
+            // (ver sugestão sobre histórico de empréstimos). Por ora mantive o comportamento
+            // original de apagar o registro, só corrigindo a devolução do exemplar ao estoque.
+            emprestimoRepository.deleteById(id);
             return ResponseEntity.ok().build();
         }).orElse(ResponseEntity.notFound().build());
     }

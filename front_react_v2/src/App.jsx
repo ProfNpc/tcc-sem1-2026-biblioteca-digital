@@ -7,29 +7,31 @@ import AdminReservasPage from './pages/AdminReservasPage';
 import AdminLivrosPage from './pages/AdminLivrosPage';
 import AdminAlunosPage from './pages/AdminAlunosPage';
 import { ToastContainer } from './components/Toast';
+import { api } from './services/api';
 
 export default function App() {
-  const [usuario, setUsuario] = useState(null);
-  const [perfil, setPerfil] = useState(null);
+  const [aluno, setAluno] = useState(null); // objeto completo: {id, nome, ra, perfil, unidade}
   const [pagina, setPagina] = useState('catalogo');
   const [showLogin, setShowLogin] = useState(false);
   const [darkMode, setDarkMode] = useState(() => localStorage.getItem('dark') === '1');
+
+  const usuario = aluno?.nome ?? null;
+  const perfil = aluno?.perfil ?? null;
 
   useEffect(() => {
     document.body.classList.toggle('dark-mode', darkMode);
     localStorage.setItem('dark', darkMode ? '1' : '0');
   }, [darkMode]);
 
-  function handleLogin(nome, p) {
-    setUsuario(nome);
-    setPerfil(p);
+  function handleLogin(alunoLogado) {
+    setAluno(alunoLogado);
     setShowLogin(false);
-    setPagina(p === 'ADMIN' ? 'admin-reservas' : 'acervo');
+    setPagina(alunoLogado.perfil === 'ADMIN' ? 'admin-reservas' : 'acervo');
   }
 
   function handleLogout() {
-    setUsuario(null);
-    setPerfil(null);
+    api.encerrarSessao();
+    setAluno(null);
     setPagina('catalogo');
     setShowLogin(false);
   }
@@ -108,7 +110,7 @@ export default function App() {
       {/* PÁGINAS */}
       <main>
         {pagina === 'catalogo' && <CatalogoPage onIrParaLogin={() => setShowLogin(true)} />}
-        {pagina === 'acervo' && <AcervoPage usuario={usuario} />}
+        {pagina === 'acervo' && <AcervoPage usuario={usuario} unidade={aluno?.unidade} />}
         {pagina === 'reservas' && <ReservasPage usuario={usuario} />}
         {pagina === 'admin-reservas' && <AdminReservasPage />}
         {pagina === 'admin-livros' && <AdminLivrosPage />}

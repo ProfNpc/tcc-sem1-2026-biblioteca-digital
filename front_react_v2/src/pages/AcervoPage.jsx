@@ -2,15 +2,6 @@ import { useEffect, useState } from 'react';
 import { api, IMG_BASE } from '../services/api';
 import { useToast } from '../components/Toast';
 
-const POLOS = [
-  'ITB Brasílio Flores de Azevedo',
-  'ITB Prof. Munir José',
-  'ITB Profª Maria Sylvia Chaluppe Mello',
-  'ITB Profº Hércules Alves de Oliveira',
-  'ITB Profº Moacyr Domingos Sávio Veronezi',
-  'ITB Profª Maria Theodora',
-];
-
 const CAPA_PADRAO = 'https://images.unsplash.com/photo-1544947950-fa07a98d237f?auto=format&fit=crop&w=400&q=80';
 
 function getCapaUrl(livro) {
@@ -23,18 +14,22 @@ function getCapaUrl(livro) {
   return CAPA_PADRAO;
 }
 
-export default function AcervoPage({ usuario }) {
+export default function AcervoPage({ usuario, unidade }) {
   const [livros, setLivros] = useState([]);
   const [busca, setBusca] = useState('');
   const [loading, setLoading] = useState(true);
   const [modalLivro, setModalLivro] = useState(null);
-  const [poloSelecionado, setPoloSelecionado] = useState(POLOS[0]);
   const [reservando, setReservando] = useState(false);
   const toast = useToast();
 
-  useEffect(() => {
-    api.getLivros().then(setLivros).finally(() => setLoading(false));
-  }, []);
+  function carregar() {
+    setLoading(true);
+    // Filtra direto na API pelo campo unidade do aluno logado, pra nunca mostrar
+    // um livro que não existe no polo dele.
+    api.getLivros(unidade).then(setLivros).finally(() => setLoading(false));
+  }
+
+  useEffect(() => { carregar(); }, [unidade]);
 
   const livrosFiltrados = livros.filter(l =>
     l.titulo.toLowerCase().includes(busca.toLowerCase()) ||
@@ -47,15 +42,14 @@ export default function AcervoPage({ usuario }) {
       const resp = await api.criarEmprestimo({
         nomeAluno: usuario,
         tituloLivro: modalLivro.titulo,
-        poloRetirada: poloSelecionado
       });
       if (resp.ok) {
-        toast(`✅ Reserva confirmada! Retire em: ${poloSelecionado}`);
+        toast(`✅ Reserva confirmada! Retire em: ${modalLivro.unidade}`);
         setModalLivro(null);
-        const dados = await api.getLivros();
-        setLivros(dados);
+        carregar();
       } else {
-        toast('⚠️ Não foi possível reservar. Tente novamente.');
+        const msg = await resp.text().catch(() => '');
+        toast(`⚠️ ${msg || 'Não foi possível reservar. Tente novamente.'}`);
       }
     } catch {
       toast('⚠️ Erro de conexão com o servidor.');
@@ -89,10 +83,13 @@ export default function AcervoPage({ usuario }) {
               <h3>{livro.titulo}</h3>
               <p>Autor: {livro.autor}</p>
               <p>Ano: {livro.anoPublicacao}</p>
+              <p style={{ fontSize: '0.85rem', color: '#64748b' }}>
+                {livro.quantidadeDisponivel ?? 0} de {livro.quantidadeTotal ?? 1} exemplares disponíveis
+              </p>
               <button
                 className="btn-reservar"
                 disabled={!livro.disponivel}
-                onClick={() => { setModalLivro(livro); setPoloSelecionado(POLOS[0]); }}
+                onClick={() => setModalLivro(livro)}
               >
                 {livro.disponivel ? '📌 Reservar' : 'Indisponível'}
               </button>
@@ -111,9 +108,10 @@ export default function AcervoPage({ usuario }) {
             </p>
             <div className="campo">
               <label>Polo de Retirada</label>
-              <select className="polo-select" value={poloSelecionado} onChange={e => setPoloSelecionado(e.target.value)}>
-                {POLOS.map(p => <option key={p} value={p}>{p}</option>)}
-              </select>
+              <p style={{ margin: 0, fontWeight: 600 }}>📍 {modalLivro.unidade}</p>
+              <p style={{ margin: '4px 0 0', fontSize: '0.8rem', color: '#64748b' }}>
+                A retirada é sempre na unidade onde o exemplar está.
+              </p>
             </div>
             <div className="modal-footer">
               <button className="btn-cancelar" onClick={() => setModalLivro(null)}>Cancelar</button>

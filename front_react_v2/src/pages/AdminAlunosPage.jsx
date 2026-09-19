@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
 import { api } from '../services/api';
 import { useToast } from '../components/Toast';
+import { NOMES_UNIDADES } from '../constants/unidades';
 
-const VAZIO = { nome: '', ra: '', senha: '', email: '', perfil: 'ALUNO' };
+const VAZIO = { nome: '', ra: '', senha: '', email: '', perfil: 'ALUNO', unidade: NOMES_UNIDADES[0] };
 
 export default function AdminAlunosPage() {
   const [alunos, setAlunos] = useState([]);
@@ -24,7 +25,7 @@ export default function AdminAlunosPage() {
   }
 
   function abrirEditar(aluno) {
-    setForm({ nome: aluno.nome, ra: aluno.ra, senha: '', email: aluno.email || '', perfil: aluno.perfil });
+    setForm({ nome: aluno.nome, ra: aluno.ra, senha: '', email: aluno.email || '', perfil: aluno.perfil, unidade: aluno.unidade || NOMES_UNIDADES[0] });
     setEditId(aluno.id);
     setModal(true);
   }
@@ -42,8 +43,8 @@ export default function AdminAlunosPage() {
       }
       setModal(false);
       carregar();
-    } catch {
-      toast('⚠️ Erro ao salvar aluno.');
+    } catch (erro) {
+      toast(`⚠️ ${erro.message || 'Erro ao salvar aluno.'}`);
     }
     setSalvando(false);
   }
@@ -76,13 +77,14 @@ export default function AdminAlunosPage() {
             <th>Nome</th>
             <th>RA</th>
             <th>Email</th>
+            <th>Unidade</th>
             <th>Perfil</th>
             <th>Ações</th>
           </tr>
         </thead>
         <tbody>
           {filtrados.length === 0 && (
-            <tr><td colSpan="6" style={{ textAlign: 'center', padding: '30px', color: '#64748b' }}>Nenhum aluno encontrado.</td></tr>
+            <tr><td colSpan="7" style={{ textAlign: 'center', padding: '30px', color: '#64748b' }}>Nenhum aluno encontrado.</td></tr>
           )}
           {filtrados.map(a => (
             <tr key={a.id}>
@@ -90,6 +92,7 @@ export default function AdminAlunosPage() {
               <td><strong>{a.nome}</strong></td>
               <td>{a.ra}</td>
               <td>{a.email || '-'}</td>
+              <td><small>📍 {a.unidade || '-'}</small></td>
               <td>
                 <span className={`status ${a.perfil === 'ADMIN' ? 'status-azul' : 'status-verde'}`}>
                   {a.perfil === 'ADMIN' ? '⚙️ Admin' : '📚 Aluno'}
@@ -127,6 +130,12 @@ export default function AdminAlunosPage() {
               <div className="campo">
                 <label>Email</label>
                 <input type="email" value={form.email} onChange={e => setForm(f => ({ ...f, email: e.target.value }))} />
+              </div>
+              <div className="campo">
+                <label>Unidade</label>
+                <select className="polo-select" required value={form.unidade} onChange={e => setForm(f => ({ ...f, unidade: e.target.value }))}>
+                  {NOMES_UNIDADES.map(u => <option key={u} value={u}>{u}</option>)}
+                </select>
               </div>
               <div className="campo">
                 <label>Perfil</label>

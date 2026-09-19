@@ -9,5 +9,4 @@ import java.util.List;
 @Repository
 public interface EmprestimoRepository extends JpaRepository<Emprestimo, Long> {
     List<Emprestimo> findByNomeAluno(String nomeAluno);
-    long countByTituloLivroAndPoloRetirada(String tituloLivro, String poloRetirada);
 }

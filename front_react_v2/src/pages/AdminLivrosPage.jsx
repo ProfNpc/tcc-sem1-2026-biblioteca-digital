@@ -1,8 +1,9 @@
 import { useEffect, useState, useRef } from 'react';
 import { api, IMG_BASE } from '../services/api';
 import { useToast } from '../components/Toast';
+import { NOMES_UNIDADES } from '../constants/unidades';
 
-const VAZIO = { titulo: '', autor: '', anoPublicacao: '', isbn: '' };
+const VAZIO = { titulo: '', autor: '', anoPublicacao: '', isbn: '', unidade: NOMES_UNIDADES[0], quantidadeTotal: 1 };
 const CAPA_PADRAO = 'https://images.unsplash.com/photo-1544947950-fa07a98d237f?auto=format&fit=crop&w=400&q=80';
 
 export default function AdminLivrosPage() {
@@ -29,7 +30,14 @@ export default function AdminLivrosPage() {
   }
 
   function abrirEditar(livro) {
-    setForm({ titulo: livro.titulo, autor: livro.autor, anoPublicacao: livro.anoPublicacao, isbn: livro.isbn || '' });
+    setForm({
+      titulo: livro.titulo,
+      autor: livro.autor,
+      anoPublicacao: livro.anoPublicacao,
+      isbn: livro.isbn || '',
+      unidade: livro.unidade || NOMES_UNIDADES[0],
+      quantidadeTotal: livro.quantidadeTotal ?? 1,
+    });
     setEditId(livro.id);
     setImagemPreview(livro.imagemCapa ? `${IMG_BASE}/${livro.imagemCapa}` : null);
     setArquivoImagem(null);
@@ -63,7 +71,7 @@ export default function AdminLivrosPage() {
       }
 
       setModal(false); carregar();
-    } catch { toast('⚠️ Erro ao salvar livro.'); }
+    } catch (erro) { toast(`⚠️ ${erro.message || 'Erro ao salvar livro.'}`); }
     setSalvando(false);
   }
 
@@ -91,7 +99,7 @@ export default function AdminLivrosPage() {
       <table>
         <thead>
           <tr>
-            <th>Capa</th><th>ID</th><th>Título</th><th>Autor</th><th>Ano</th><th>ISBN</th><th>Status</th><th>Ações</th>
+            <th>Capa</th><th>ID</th><th>Título</th><th>Autor</th><th>Ano</th><th>Unidade</th><th>Estoque</th><th>Ações</th>
           </tr>
         </thead>
         <tbody>
@@ -111,10 +119,10 @@ export default function AdminLivrosPage() {
               <td><strong>{l.titulo}</strong></td>
               <td>{l.autor}</td>
               <td>{l.anoPublicacao}</td>
-              <td>{l.isbn || '-'}</td>
+              <td><small>📍 {l.unidade || 'Não definida'}</small></td>
               <td>
                 <span className={`status ${l.disponivel ? 'status-verde' : 'status-vermelho'}`}>
-                  {l.disponivel ? 'Livre' : 'Emprestado'}
+                  {l.quantidadeDisponivel ?? 0} / {l.quantidadeTotal ?? 1}
                 </span>
               </td>
               <td>
@@ -162,6 +170,18 @@ export default function AdminLivrosPage() {
                 <div className="campo">
                   <label>ISBN</label>
                   <input value={form.isbn} onChange={e => setForm(f => ({ ...f, isbn: e.target.value }))} />
+                </div>
+              </div>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+                <div className="campo">
+                  <label>Unidade</label>
+                  <select className="polo-select" required value={form.unidade} onChange={e => setForm(f => ({ ...f, unidade: e.target.value }))}>
+                    {NOMES_UNIDADES.map(u => <option key={u} value={u}>{u}</option>)}
+                  </select>
+                </div>
+                <div className="campo">
+                  <label>Qtd. de Exemplares</label>
+                  <input type="number" min="1" required value={form.quantidadeTotal} onChange={e => setForm(f => ({ ...f, quantidadeTotal: Number(e.target.value) }))} />
                 </div>
               </div>
               <div className="modal-footer">

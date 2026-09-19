@@ -13,7 +13,13 @@ public class Livro {
     private String autor;
     private Integer anoPublicacao;
     private String isbn;
-    private Boolean disponivel = true;
+
+    // Unidade (polo/ITB) onde o exemplar físico fica - define quem pode ver/reservar o livro
+    private String unidade;
+
+    // CONTROLE DE ESTOQUE: quantos exemplares existem no total e quantos estão livres agora
+    private Integer quantidadeTotal = 1;
+    private Integer quantidadeDisponivel = 1;
 
     // EXCLUSÃO LÓGICA: false = excluído, true = ativo
     private Boolean ativo = true;
@@ -33,8 +39,24 @@ public class Livro {
     public void setAnoPublicacao(Integer anoPublicacao) { this.anoPublicacao = anoPublicacao; }
     public String getIsbn() { return isbn; }
     public void setIsbn(String isbn) { this.isbn = isbn; }
-    public Boolean getDisponivel() { return disponivel; }
-    public void setDisponivel(Boolean disponivel) { this.disponivel = disponivel; }
+
+    public String getUnidade() { return unidade; }
+    public void setUnidade(String unidade) { this.unidade = unidade; }
+
+    public Integer getQuantidadeTotal() { return quantidadeTotal; }
+    public void setQuantidadeTotal(Integer quantidadeTotal) { this.quantidadeTotal = quantidadeTotal; }
+
+    public Integer getQuantidadeDisponivel() { return quantidadeDisponivel; }
+    public void setQuantidadeDisponivel(Integer quantidadeDisponivel) { this.quantidadeDisponivel = quantidadeDisponivel; }
+
+    // Campo calculado (não persiste no banco): mantém compatibilidade com o front,
+    // que usa "disponivel" como booleano. Agora ele reflete o estoque de verdade,
+    // em vez de ser um valor manual desconectado das reservas.
+    @Transient
+    public Boolean getDisponivel() {
+        return quantidadeDisponivel != null && quantidadeDisponivel > 0;
+    }
+
     public Boolean getAtivo() { return ativo; }
     public void setAtivo(Boolean ativo) { this.ativo = ativo; }
     public String getImagemCapa() { return imagemCapa; }

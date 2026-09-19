@@ -1,51 +1,6 @@
 import { useEffect, useState } from 'react';
 import { api } from '../services/api';
-
-import poloBrasilio  from '../img/polo-brasilio.png';
-import poloMunir     from '../img/polo-munir.png';
-import poloSylvia    from '../img/polo-sylvia.png';
-import poloHercules  from '../img/polo-hercules.png';
-import poloMoacyr    from '../img/polo-moacyr.png';
-import poloAlphaville from '../img/polo-alphaville.jpg';
-
-const POLOS = [
-  {
-    nome: 'ITB Brasílio Flores de Azevedo',
-    bairro: 'Jardim Belval',
-    endereco: 'R. Interna Grupo Bandeirante, 138 - Jardim Belval, Barueri - SP, 06420-150',
-    img: poloBrasilio,
-  },
-  {
-    nome: 'ITB Prof. Munir José',
-    bairro: 'Jardim Paulista',
-    endereco: 'Estr. Velha de Itapevi, 2679 - Jardim Paulista, Barueri - SP, 06444-000',
-    img: poloMunir,
-  },
-  {
-    nome: 'ITB Profª Maria Sylvia Chaluppe Mello',
-    bairro: 'Engenho Novo',
-    endereco: 'Rua do ITB, 238 - Vila Engenho Novo, Barueri - SP, 06415-080',
-    img: poloSylvia,
-  },
-  {
-    nome: 'ITB Profº Hércules Alves de Oliveira',
-    bairro: 'Jardim Mutinga',
-    endereco: 'R. Abelardo Luz, 86 - Jardim Mutinga, Barueri - SP, 06463-260',
-    img: poloHercules,
-  },
-  {
-    nome: 'ITB Profº Moacyr Domingos Sávio Veronezi',
-    bairro: 'Parque Imperial',
-    endereco: 'R. Tomé de Souza, 259 - Parque Imperial, Barueri - SP, 06462-040',
-    img: poloMoacyr,
-  },
-  {
-    nome: 'ITB Profª Maria Theodora Pedreira de Freitas',
-    bairro: 'Alphaville',
-    endereco: 'Av. Andrômeda, 500 - Alphaville Empresarial, Barueri - SP, 06473-005',
-    img: poloAlphaville,
-  },
-];
+import { POLOS } from '../constants/unidades';
 
 function getCapaUrl(titulo) {
   const t = titulo.toLowerCase();
@@ -97,6 +52,7 @@ export default function CatalogoPage({ onIrParaLogin }) {
               <h3>{livro.titulo}</h3>
               <p>Autor: {livro.autor}</p>
               <p>Ano: {livro.anoPublicacao}</p>
+              {livro.unidade && <p style={{ fontSize: '0.8rem', color: '#64748b' }}>📍 {livro.unidade}</p>}
               <button className="btn-reservar" onClick={onIrParaLogin}>
                 🔐 Entrar para Reservar
               </button>
