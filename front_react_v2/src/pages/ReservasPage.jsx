@@ -19,10 +19,20 @@ export default function ReservasPage({ usuario }) {
   useEffect(() => { carregar(); }, [usuario, historico]);
 
   async function cancelar() {
-    const resp = await api.cancelarEmprestimo(confirmId);
-    setConfirmId(null);
-    if (resp.ok) { toast('✅ Reserva cancelada com sucesso!'); carregar(); }
-    else toast('⚠️ Erro ao cancelar reserva.');
+    try {
+      const resp = await api.cancelarEmprestimo(confirmId);
+      const texto = await resp.text().catch(() => '');
+      setConfirmId(null);
+      if (resp.ok) {
+        toast('✅ Reserva cancelada com sucesso!');
+        carregar();
+      } else {
+        toast(`⚠️ ${texto || 'Não foi possível cancelar esta reserva.'}`);
+      }
+    } catch {
+      setConfirmId(null);
+      toast('⚠️ Erro de conexão com o servidor.');
+    }
   }
 
   function formatarData(dateStr) {
@@ -33,53 +43,80 @@ export default function ReservasPage({ usuario }) {
   return (
     <div className="tabela-container">
       <div className="tabela-header">
-        <h2>{historico ? '📚 Histórico de Empréstimos' : '📋 Minhas Reservas'}</h2>
+        <h2>{historico ? '📚 Histórico de Empréstimos' : '📋 Minhas Reservas e Empréstimos'}</h2>
         <button className="btn-cancelar" onClick={() => setHistorico(h => !h)}>
           {historico ? '← Voltar às Reservas' : '📚 Ver Histórico'}
         </button>
       </div>
 
-      {loading && <p className="loading">Carregando reservas...</p>}
+      {loading && <p className="loading">Carregando...</p>}
 
       {!loading && (
         <table>
           <thead>
             <tr>
               <th>Livro</th>
-              <th>Data da Reserva</th>
-              <th>Entrega Limite</th>
-              <th>Polo de Retirada</th>
+              <th>Reserva</th>
+              <th>Retirada</th>
+              <th>Devolução prevista</th>
+              <th>Polo</th>
               <th>Situação</th>
               <th>Ações</th>
             </tr>
           </thead>
           <tbody>
             {reservas.length === 0 && (
-              <tr><td colSpan="6" style={{ textAlign: 'center', padding: '30px', color: '#64748b' }}>Nenhuma reserva encontrada.</td></tr>
+              <tr><td colSpan="7" style={{ textAlign: 'center', padding: '30px', color: '#64748b' }}>Nenhum registro encontrado.</td></tr>
             )}
             {reservas.map(r => {
-              const vencido = r.dataDevolucao && new Date() > new Date(r.dataDevolucao);
+              const hoje = new Date();
+              const limiteReserva = r.dataLimiteReserva ? new Date(`${r.dataLimiteReserva}T23:59:59`) : null;
+              const limiteDevolucao = r.dataDevolucao ? new Date(`${r.dataDevolucao}T23:59:59`) : null;
+              const reservaVencida = r.status === 'RESERVADO' && limiteReserva && hoje > limiteReserva;
+              const emprestimoAtrasado = r.status === 'RETIRADO' && limiteDevolucao && hoje > limiteDevolucao;
+
+              let situacao;
+              if (r.status === 'RESERVADO') {
+                situacao = reservaVencida
+                  ? <span className="status status-vermelho">🔴 Reserva vencida</span>
+                  : <span className="status status-verde">🟢 Reservado</span>;
+              } else if (r.status === 'RETIRADO') {
+                situacao = emprestimoAtrasado
+                  ? <span className="status status-vermelho">🔴 Em atraso</span>
+                  : <span className="status status-azul">🔵 Retirado</span>;
+              } else {
+                situacao = <span className="status">{r.status}</span>;
+              }
+
               return (
                 <tr key={r.id}>
                   <td><strong>{r.tituloLivro}</strong></td>
-                  <td>{formatarData(r.dataReserva)}</td>
+                  <td>
+                    {formatarData(r.dataReserva)}
+                    {r.status === 'RESERVADO' && r.dataLimiteReserva && (
+                      <small style={{ display: 'block', color: '#64748b' }}>
+                        até {formatarData(r.dataLimiteReserva)}
+                      </small>
+                    )}
+                  </td>
+                  <td>{formatarData(r.dataRetirada)}</td>
                   <td>{formatarData(r.dataDevolucao)}</td>
                   <td>{r.poloRetirada || 'Não informado'}</td>
+                  <td>{historico ? (
+                    r.status === 'DEVOLVIDO'
+                      ? <span className="status status-verde">🟢 Devolvido em {formatarData(r.dataDevolucaoReal)}</span>
+                      : r.status === 'EXPIRADO'
+                        ? <span className="status status-vermelho">🟠 Reserva expirada</span>
+                        : <span className="status status-vermelho">🔴 Cancelado</span>
+                  ) : situacao}</td>
                   <td>
-                    <span className={`status ${vencido ? 'status-vermelho' : 'status-verde'}`}>
-                      {r.status === 'RETIRADO' ? '🔵 Retirado' : vencido ? '🔴 Vencido' : '🟢 Em dia'}
-                    </span>
-                  </td>
-                  <td>
-                    {!historico && (
+                    {!historico && r.status === 'RESERVADO' && (
                       <button className="btn-icone btn-deletar" onClick={() => { setConfirmId(r.id); setConfirmTitulo(r.tituloLivro); }}>
                         ✕ Cancelar
                       </button>
                     )}
-                    {historico && (
-                      <span className={`status ${r.status === 'DEVOLVIDO' ? 'status-verde' : 'status-vermelho'}`}>
-                        {r.status === 'DEVOLVIDO' ? `Devolvido em ${formatarData(r.dataDevolucaoReal)}` : 'Cancelado'}
-                      </span>
+                    {!historico && r.status === 'RETIRADO' && (
+                      <span style={{ color: '#64748b', fontSize: '0.82rem' }}>Aguardando devolução</span>
                     )}
                   </td>
                 </tr>
@@ -89,7 +126,6 @@ export default function ReservasPage({ usuario }) {
         </table>
       )}
 
-      {/* MODAL DE CONFIRMAÇÃO */}
       {confirmId && (
         <div className="modal-overlay" onClick={e => e.target === e.currentTarget && setConfirmId(null)}>
           <div className="modal-box" style={{ textAlign: 'center' }}>

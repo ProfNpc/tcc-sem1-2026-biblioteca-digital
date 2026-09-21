@@ -119,7 +119,7 @@ export default function AdminAlunosPage() {
               </div>
               <div className="form-grid-2">
                 <div className="campo">
-                  <label>RA</label>
+                  <label>Usuário</label>
                   <input required value={form.ra} onChange={e => setForm(f => ({ ...f, ra: e.target.value }))} />
                 </div>
                 <div className="campo">

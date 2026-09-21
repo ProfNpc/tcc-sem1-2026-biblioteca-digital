@@ -34,7 +34,7 @@ export default function AcervoPage({ usuario, unidade }) {
         tituloLivro: modalLivro.titulo,
       });
       if (resp.ok) {
-        toast(`✅ Reserva confirmada! Retire em: ${modalLivro.unidade}`);
+        toast(`✅ Reserva confirmada! Retire no polo ${modalLivro.unidade} dentro do prazo informado.`);
         setModalLivro(null);
         carregar();
       } else {
@@ -101,7 +101,7 @@ export default function AcervoPage({ usuario, unidade }) {
               <label>Polo de Retirada</label>
               <p style={{ margin: 0, fontWeight: 600 }}>📍 {modalLivro.unidade}</p>
               <p style={{ margin: '4px 0 0', fontSize: '0.8rem', color: '#64748b' }}>
-                A retirada é sempre na unidade onde o exemplar está.
+                A reserva ficará segurada por 1 dia. Depois da retirada, o empréstimo terá prazo próprio de devolução.
               </p>
             </div>
             <div className="modal-footer">

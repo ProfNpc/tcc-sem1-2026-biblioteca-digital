@@ -116,7 +116,7 @@ export default function LoginPage({ onLogin }) {
             <h2>{intencao === 'ADMIN' ? '⚙️ Acesso Administrativo' : '📚 Portal do Aluno'}</h2>
             <form onSubmit={fazerLogin}>
               <div className="campo">
-                <label>{intencao === 'ADMIN' ? 'Usuário Admin' : 'RA do Aluno'}</label>
+                <label>{intencao === 'ADMIN' ? 'Usuário Admin' : 'Usuário'}</label>
                 <input type="text" placeholder="Digite seu Usuário" value={ra} onChange={e => setRa(e.target.value)} required />
               </div>
               <div className="campo">
