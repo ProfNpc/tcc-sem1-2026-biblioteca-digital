@@ -38,11 +38,11 @@ public class BibliotecadigitalApplication {
 			// 2. Cria um Aluno de teste
 			if (alunoRepo.findByRa("aluno1") == null) {
 				Aluno aluno = new Aluno();
-				aluno.setNome("Guilherme Souza");
-				aluno.setRa("aluno1");
+				aluno.setNome("Daniely Cardoso");
+				aluno.setRa("101555");
 				aluno.setSenha(passwordEncoder.encode("123456"));
 				aluno.setPerfil("ALUNO");
-				aluno.setEmail("gui@email.com");
+				aluno.setEmail("dany@email.com");
 				aluno.setUnidade("ITB Brasílio Flores de Azevedo");
 				alunoRepo.save(aluno);
 				System.out.println(">>> [SEED] Aluno de teste criado: RA 'aluno1' / Senha '123456' (unidade: ITB Brasílio Flores de Azevedo)");
