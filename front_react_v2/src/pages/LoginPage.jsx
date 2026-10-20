@@ -8,6 +8,7 @@ export default function LoginPage({ onLogin }) {
   const [ra, setRa] = useState('');
   const [senha, setSenha] = useState('');
   const [nome, setNome] = useState('');
+  const [cadEmail, setCadEmail] = useState('');
   const [cadRa, setCadRa] = useState('');
   const [cadSenha, setCadSenha] = useState('');
   const [cadUnidade, setCadUnidade] = useState(NOMES_UNIDADES[0]);
@@ -77,7 +78,7 @@ export default function LoginPage({ onLogin }) {
         nome: nome.trim(),
         ra: cadRa.trim(),
         senha: cadSenha.trim(),
-        email: 'novo@bibliotech.com',
+        email: cadEmail.trim().toLowerCase(),
         perfil: 'ALUNO',
         unidade: cadUnidade,
       });
@@ -141,6 +142,10 @@ export default function LoginPage({ onLogin }) {
               <div className="campo">
                 <label>Nome Completo</label>
                 <input type="text" placeholder="Ex: João da Silva" value={nome} onChange={e => setNome(e.target.value)} required />
+              </div>
+              <div className="campo">
+                <label>E-mail</label>
+                <input type="email" placeholder="Ex: joao@email.com" value={cadEmail} onChange={e => setCadEmail(e.target.value)} autoComplete="email" required />
               </div>
               <div className="campo">
                 <label>Usuário</label>

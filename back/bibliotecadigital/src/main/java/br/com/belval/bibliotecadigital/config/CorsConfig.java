@@ -1,3 +1,4 @@
+
 package br.com.belval.bibliotecadigital.config;
 
 import org.springframework.context.annotation.Configuration;
@@ -9,7 +10,6 @@ public class CorsConfig implements WebMvcConfigurer {
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        // Libera o front-end (aberto como arquivo local OU via Live Server) de acessar a API
         registry.addMapping("/**")
                 .allowedOrigins(
                     "http://localhost:5173",
@@ -17,9 +17,13 @@ public class CorsConfig implements WebMvcConfigurer {
                     "http://localhost:5500",
                     "http://127.0.0.1:5500",
                     "http://localhost:8080",
-                    "null"          // necessário para abrir o HTML direto pelo explorador de arquivos
+                    "http://localhost:8081",
+                    "http://127.0.0.1:8081",
+                    "null"
                 )
-                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+                .allowedMethods(
+                    "GET", "POST", "PUT", "DELETE", "OPTIONS"
+                )
                 .allowedHeaders("*");
     }
 }
